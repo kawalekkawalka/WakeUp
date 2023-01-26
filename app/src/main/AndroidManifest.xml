@@ -20,13 +20,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.main.activities.AlarmActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ui.main.activities.CalendarActivity"
             android:exported="false">
             <meta-data

@@ -3,4 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="container">Your weather forecast</string>
     <string name="NewsTitle">Interesting today\'s news:</string>
+    <string name="alarm">Alarm</string>
+    <string name="calendar">Calendar</string>
+    <string name="home">Home</string>
 </resources>

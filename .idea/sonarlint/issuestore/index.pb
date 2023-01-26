@@ -36,3 +36,11 @@ n
 >app/src/main/java/com/example/wakeup/ui/main/news/NewsAPI.java,1\2\125a88a163349b08b67be8a5957dadb43ae9e853
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+u
+Eapp/src/main/java/com/example/wakeup/ui/main/utils/DateConverter.java,c\1\c1fa2a6aaaf366ed902581447371d0c7c090cd83
+m
+=app/src/main/java/com/example/wakeup/ui/main/models/Task.java,9\2\9226ac3c6b225d858338d01fd064e7476162df93
+v
+Fapp/src/main/java/com/example/wakeup/ui/main/database/dao/TaskDao.java,8\2\82d0fd3dea0e4defa4ee95401f8e7dff8e2ea686
+v
+Fapp/src/main/java/com/example/wakeup/ui/main/database/AppDatabase.java,b\1\b1d577acd8c6cfcbb6e7d4665b9ab82b8443a015
