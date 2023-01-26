@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.wakeup.ui.main.MainFragment;
 import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
 import com.example.wakeup.ui.main.fragments.NewsFragment;
 
@@ -17,10 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            // what to do with main fragment?
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.container, MainFragment.newInstance())
-//                    .commitNow();
             getSupportFragmentManager().beginTransaction().add(R.id.container, new NewsFragment()).commit();
         }
 

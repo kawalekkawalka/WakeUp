@@ -6,9 +6,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 import com.example.wakeup.ui.main.models.Task;
+import com.example.wakeup.ui.main.utils.DateConverter;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,7 @@ public interface TaskDao {
     @Query("SELECT * FROM task")
     LiveData<List<Task>> getAll();
 
+    @TypeConverters({DateConverter.class})
     @Query("SELECT * FROM task WHERE date(dueDate) = date(:date)")
     LiveData<List<Task>> getTasksForDate(Date date);
 }
