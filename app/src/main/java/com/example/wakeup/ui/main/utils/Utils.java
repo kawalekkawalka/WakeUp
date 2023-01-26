@@ -37,6 +37,7 @@ public class Utils {
         return builder.toString();
     }
 
+
     public static String[] getWeatherFromApi() throws IOException {
         String API_URL = "https://api.open-meteo.com/v1/forecast?latitude=53.13&longitude=23.16&hourly=temperature_2m,relativehumidity_2m,weathercode,surface_pressure";
         String temperature;
