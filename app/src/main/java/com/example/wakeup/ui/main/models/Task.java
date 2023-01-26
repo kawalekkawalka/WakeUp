@@ -1,19 +1,38 @@
 package com.example.wakeup.ui.main.models;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.example.wakeup.ui.main.utils.DateConverter;
+
 import java.util.Date;
 
+@Entity(tableName = "task")
 public class Task {
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private String title;
 
-    private String details;
+    private String subtitle;
 
+    @TypeConverters({DateConverter.class})
     private Date dueDate;
 
+    @Ignore
     private TaskState state;
 
     private Boolean hasReminder;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -23,12 +42,12 @@ public class Task {
         this.title = title;
     }
 
-    public String getDetails() {
-        return details;
+    public String getSubtitle() {
+        return subtitle;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     public Date getDueDate() {
@@ -53,9 +72,5 @@ public class Task {
 
     public void setHasReminder(Boolean hasReminder) {
         this.hasReminder = hasReminder;
-    }
-
-    public int getId() {
-        return id;
     }
 }
