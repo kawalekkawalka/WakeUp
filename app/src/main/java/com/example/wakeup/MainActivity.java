@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.wakeup.ui.main.MainFragment;
 import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
+import com.example.wakeup.ui.main.activities.TaskListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onButtonClick(View view) {
         // open the new activity when the button is clicked
-        Intent intent = new Intent(this, ExtendedWeatherActivity.class);
+        Intent intent = new Intent(this, TaskListActivity.class);
         startActivity(intent);
     }
 
