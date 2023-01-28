@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
-import com.example.wakeup.ui.main.fragments.AlarmFragment;
 import com.example.wakeup.ui.main.fragments.TaskListFragment;
 import com.example.wakeup.databinding.ActivityMainBinding;
 import com.example.wakeup.ui.main.fragments.NewsFragment;
