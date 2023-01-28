@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.home:
                     //replaceFragment(new NewsFragment());
-                    WeatherFragment weatherFragment = WeatherFragment.newInstance("extended");
-                    replaceFragment(weatherFragment);
+                    Intent switchActivityIntent = new Intent(this, ExtendedWeatherActivity.class);
+                    startActivity(switchActivityIntent);
                     break;
                 case R.id.calendar:
                     //replaceFragment(new CalendarFragment());

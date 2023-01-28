@@ -21,7 +21,7 @@ public class ExtendedWeatherActivity extends AppCompatActivity {
     }
 
     protected void createFragment(){
-        WeatherFragment fragment = WeatherFragment.newInstance("POGODA DLA DANEGO MIEJCA");
+        WeatherFragment fragment = WeatherFragment.newInstance("extended");
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_container, fragment);

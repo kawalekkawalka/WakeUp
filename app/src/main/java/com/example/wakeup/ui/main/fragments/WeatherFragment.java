@@ -38,7 +38,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
-        conditionsContainer = rootView.findViewById(R.id.conditonsContainer);
+        conditionsContainer = rootView.findViewById(R.id.conditions_container);
         ApiProxy proxy = new ApiProxy();
         String weatherType = getArguments().getString(ARG_PARAM1);
         Log.d("testy", weatherType);

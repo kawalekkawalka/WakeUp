@@ -22,10 +22,12 @@ import retrofit2.Response;
 public class ApiProxy {
     private ApiHandler apiHandler;
     private Map<String, Object> apiServices;
+    private HashMap<String, String> conditions;
 
     public ApiProxy() {
         apiHandler = ApiHandler.getInstance();
         apiServices = new HashMap<>();
+        conditions = new HashMap<String, String>();
     }
 
     private <T> T createApiService(String baseUrl, Class<T> serviceClass) {
@@ -38,7 +40,6 @@ public class ApiProxy {
 
     public void getWeatherData(TextView conditionsContainer, String weatherType){
         WeatherApi apiService = this.createApiService("https://api.open-meteo.com/v1/",WeatherApi.class);
-        final HashMap<String, String>[] conditions = new HashMap[]{new HashMap<String, String>()};
         List<String> hourly = Arrays.asList("temperature_2m", "relativehumidity_2m", "weathercode", "surface_pressure");
         Call<JsonObject> call = apiService.getWeatherData(53.13, 23.16, hourly);
         call.enqueue(new Callback<JsonObject>() {
@@ -47,13 +48,13 @@ public class ApiProxy {
                 if (response.isSuccessful()) {
                     Log.d("Retrofit", "Polaczylo z api");
                     JsonObject json = response.body();
-                    conditions[0] = getConditionsFromJson(json);
+                    conditions = getConditionsFromJson(json);
                     WeatherController weatherController = new WeatherController();
                     if (weatherType == "extended"){
-                        conditionsContainer.setText(weatherController.getExtendedWeather(conditions[0]));
+                        conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
                     }
                     else{
-                        conditionsContainer.setText(weatherController.getNormalWeather(conditions[0]));
+                        conditionsContainer.setText(weatherController.getNormalWeather(conditions));
                     }
                 }
                 else {
@@ -78,7 +79,6 @@ public class ApiProxy {
     }
 
     private HashMap getConditionsFromJson(JsonObject json){
-        HashMap<String, String> conditions = new HashMap<String, String>();
         JsonObject hourlyData = json.get("hourly").getAsJsonObject();
         JsonArray temporaryArray = hourlyData.get("weathercode").getAsJsonArray();
         conditions.put("weathercode_day", temporaryArray.get(13).getAsString());
