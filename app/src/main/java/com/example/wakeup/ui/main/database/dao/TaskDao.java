@@ -1,5 +1,8 @@
 package com.example.wakeup.ui.main.database.dao;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -31,7 +34,8 @@ public interface TaskDao {
     LiveData<List<Task>> getAll();
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @TypeConverters(LocalDateConverter.class)
-    @Query("SELECT * FROM task WHERE date(dueDate) = date(:date)")
+    @Query("SELECT * FROM task WHERE dueDate = :date")
     LiveData<List<Task>> getTasksForDate(LocalDate date);
 }
