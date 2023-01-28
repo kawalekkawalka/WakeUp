@@ -33,13 +33,14 @@ public class NewsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.news_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new NewsAdapter();
+        adapter = new NewsAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
         Retrofit retrofit = RetrofitClient.getRetrofitInstance();
         NewsAPI newsAPI = retrofit.create(NewsAPI.class);
+
 
         Call<NewsApiResponse> call = newsAPI.getNews("us", "0addf20abbe1447199757fcf5281cfd3");
         call.enqueue(new Callback<NewsApiResponse>() {
@@ -57,7 +58,6 @@ public class NewsFragment extends Fragment {
                 // handle failure
             }
         });
-
         return view;
     }
 }
