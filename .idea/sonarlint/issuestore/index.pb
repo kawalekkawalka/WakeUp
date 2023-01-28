@@ -18,10 +18,6 @@ Rapp/src/main/java/com/example/wakeup/ui/main/controllers/weather/BasicWeather.j
 Wapp/src/main/java/com/example/wakeup/ui/main/controllers/weather/HumidityDecorator.java,c\d\cd842c680a0f4d6f20ef1932e834d3adeddf892b
 }
 Mapp/src/main/java/com/example/wakeup/ui/main/controllers/weather/Weather.java,3\f\3f3346e9318da70d46309bd6678e9d83f162f36c
-{
-Kapp/src/main/java/com/example/wakeup/ui/main/fragments/WeatherFragment.java,5\9\59a9c62a169d7ebec751a866358d0862f28da46d
-v
-Fapp/src/main/java/com/example/wakeup/ui/main/utils/RetrofitClient.java,7\1\71481001245e1f09c57686291bfad079cf5270f5
 r
 Bapp/src/main/java/com/example/wakeup/ui/main/news/NewsAdapter.java,d\9\d9a06725c50bbf5d9b0876f81f5af6e2799e2899
 x
@@ -36,3 +32,31 @@ n
 >app/src/main/java/com/example/wakeup/ui/main/news/NewsAPI.java,1\2\125a88a163349b08b67be8a5957dadb43ae9e853
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+r
+Bapp/src/main/java/com/example/wakeup/ui/main/utils/WeatherApi.java,5\d\5d60692ef994f9a7aefafb1965525350f7e14f3c
+Š
+Zapp/src/main/java/com/example/wakeup/ui/main/controllers/weather/TemperatureDecorator.java,c\b\cb84df2734638fe654833e3d5d769c8b914e038c
+
+Oapp/src/main/java/com/example/wakeup/ui/main/controllers/WeatherController.java,2\5\2539eb6694e82a1f745609f8bbbcab05dadca9ee
+r
+Bapp/src/main/java/com/example/wakeup/ui/main/utils/ApiHandler.java,5\9\59cafe0284c70ee3c7c7f3fea92559bc46caa4b0
+m
+=app/src/main/java/com/example/wakeup/ui/main/data/weatherjson,4\2\42fd15c3aada5cf6046a86fef0deefea5a8682a5
+}
+Mapp/src/main/java/com/example/wakeup/ui/main/activities/CalendarActivity.java,3\0\30375fbb0003b52dff2447682e79c7b5a206ab0c
+z
+Japp/src/main/java/com/example/wakeup/ui/main/activities/AlarmActivity.java,f\f\ff493b2e0d25897a9339f6174dc6c7556968601f
+„
+Tapp/src/main/java/com/example/wakeup/ui/main/activities/ExtendedWeatherActivity.java,9\b\9b955e267d6db2debe4db4754f10c4126dd7f236
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+v
+Fapp/src/main/java/com/example/wakeup/ui/main/utils/RetrofitClient.java,7\1\71481001245e1f09c57686291bfad079cf5270f5
+v
+Fapp/src/main/java/com/example/wakeup/ui/main/database/AppDatabase.java,b\1\b1d577acd8c6cfcbb6e7d4665b9ab82b8443a015
+}
+Mapp/src/main/java/com/example/wakeup/ui/main/activities/TaskListActivity.java,f\9\f9149f08588901a0518b65df898f69a230309f3f
+x
+Happ/src/main/java/com/example/wakeup/ui/main/fragments/TaskFragment.java,1\f\1f1d477cc4a9369568cb89545c51b1c0c1b37e4b
+p
+@app/src/main/java/com/example/wakeup/ui/main/utils/ApiProxy.java,9\1\911bfe896f976e2c2cfaad7d201c1c6fc04a2122

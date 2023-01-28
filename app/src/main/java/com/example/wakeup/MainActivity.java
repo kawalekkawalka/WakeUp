@@ -1,14 +1,10 @@
 package com.example.wakeup;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
-import com.example.wakeup.ui.main.MainFragment;
-import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
-import com.example.wakeup.ui.main.activities.TaskListActivity;
+import com.example.wakeup.ui.main.fragments.TaskListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,15 +14,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow();
+                    .add(R.id.container,
+                            new TaskListFragment()).commit();
         }
     }
 
-    public void onButtonClick(View view) {
-        // open the new activity when the button is clicked
-        Intent intent = new Intent(this, TaskListActivity.class);
-        startActivity(intent);
-    }
 
 }

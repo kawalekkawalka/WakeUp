@@ -16,7 +16,7 @@ public class Task {
 
     private String title;
 
-    private String subtitle;
+    private String details;
 
     @TypeConverters({DateConverter.class})
     private Date dueDate;
@@ -25,6 +25,29 @@ public class Task {
     private TaskState state;
 
     private Boolean hasReminder;
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", details='" + details + '\'' +
+                ", dueDate=" + dueDate +
+                ", state=" + state +
+                ", hasReminder=" + hasReminder +
+                '}';
+    }
+
+    public Task(int id, String title, String details, Date dueDate, Boolean hasReminder) {
+        this.id = id;
+        this.title = title;
+        this.details = details;
+        this.dueDate = dueDate;
+        this.hasReminder = hasReminder;
+    }
+
+    public Task() {
+
+    }
 
     public int getId() {
         return id;
@@ -42,12 +65,12 @@ public class Task {
         this.title = title;
     }
 
-    public String getSubtitle() {
-        return subtitle;
+    public String getDetails() {
+        return details;
     }
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Date getDueDate() {
