@@ -1,7 +1,9 @@
 package com.example.wakeup.ui.main.database.repositories;
 
 import android.app.Application;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 
 import com.example.wakeup.ui.main.database.AppDatabase;
@@ -17,6 +19,7 @@ public class TaskRepository {
     private final LiveData<List<Task>> allTasks;
     private LiveData<List<Task>> tasksForDate;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public TaskRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDao = db.taskDao();
@@ -27,14 +30,17 @@ public class TaskRepository {
         return allTasks;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void insert(Task task) {
         AppDatabase.databaseWriteExecutor.execute(() -> taskDao.insert(task));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void update(Task task) {
         AppDatabase.databaseWriteExecutor.execute(() -> taskDao.update(task));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void delete(Task task) {
         AppDatabase.databaseWriteExecutor.execute(() -> taskDao.delete(task));
     }

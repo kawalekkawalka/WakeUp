@@ -13,3 +13,15 @@ Oapp/src/main/java/com/example/wakeup/ui/main/controllers/WeatherController.java
 Vapp/src/main/java/com/example/wakeup/ui/main/controllers/weather/WeatherDecorator.java,f\5\f5515bea789e512f5b52015439a4dde073326e9a
 m
 =app/src/main/java/com/example/wakeup/ui/main/utils/Utils.java,6\b\6b4e8545338ae9abaf582ed90cf500af209cb7be
+u
+Eapp/src/main/java/com/example/wakeup/ui/main/news/NewsViewHolder.java,1\b\1bde9acb0e0825ab02834c53620c1aa2346a9bfd
+m
+=app/src/main/java/com/example/wakeup/ui/main/models/News.java,4\1\41dd714a0baef259b0f0bd83793b53cf6bba6f86
+r
+Bapp/src/main/java/com/example/wakeup/ui/main/utils/ApiHandler.java,5\9\59cafe0284c70ee3c7c7f3fea92559bc46caa4b0
+p
+@app/src/main/java/com/example/wakeup/ui/main/utils/ApiProxy.java,9\1\911bfe896f976e2c2cfaad7d201c1c6fc04a2122
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e

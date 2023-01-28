@@ -1,7 +1,12 @@
 package com.example.wakeup.ui.main.fragments;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.content.Context.ALARM_SERVICE;
+
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -15,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,10 +31,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wakeup.MainActivity;
 import com.example.wakeup.R;
-import com.example.wakeup.ui.main.activities.TaskListActivity;
+import com.example.wakeup.ui.main.alarms.ReminderReceiver;
+import com.example.wakeup.ui.main.database.viewmodels.AlarmViewModel;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
+import com.example.wakeup.ui.main.models.Alarm;
 import com.example.wakeup.ui.main.models.Task;
 import com.example.wakeup.ui.main.models.TaskState;
 import com.google.android.material.datepicker.DateSelector;
@@ -51,6 +58,7 @@ public class TaskListFragment extends Fragment {
     private ImageView nextDateArrow;
     private RecyclerView recyclerView;
     private TaskViewModel taskViewModel;
+    private AlarmViewModel alarmViewModel;
     private LocalDate currDate;
     private FloatingActionButton fab;
     private final Calendar calendar = Calendar.getInstance();
@@ -124,7 +132,6 @@ public class TaskListFragment extends Fragment {
                         newTask.setTitle(title.getText().toString());
                         newTask.setDetails(details.getText().toString());
                         newTask.setHasReminder(hasReminder.isChecked());
-                        newTask.setDueDate(calendar.getTime());
                         checkReminder(newTask);
                         taskViewModel.insert(newTask);
                     }
@@ -150,32 +157,40 @@ public class TaskListFragment extends Fragment {
                 adapter.setTasks(tasks);
             }
         });
-//        List<Task> sampleData = new ArrayList<>();
-//        sampleData.add(new Task(0, "Task 1", "Details 1", new Date(), false));
-//        sampleData.add(new Task(1, "Task 2", "Details 2", new Date(), true));
-//        sampleData.add(new Task(2, "Task 3", "Details 3", new Date(), false));
-//        adapter.setTasks(sampleData);
 
         return view;
     }
 
     private void checkReminder(Task newTask) {
-        if (newTask.getHasReminder()){
-            Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(getContext(), ReminderReceiver.class);
-            PendingIntent pendingIntent = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (newTask.getHasReminder()){
+                createNewAlarm(newTask);
+                Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), ReminderReceiver.class);
+                PendingIntent pendingIntent = null;
                 pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, FLAG_IMMUTABLE);
+                AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10000, pendingIntent);
             }
-            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
 
-    private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNewAlarm(Task newTask) {
+        Alarm newAlarm = new Alarm();
+        newAlarm.setActive(false);
+        newAlarm.setDueDate(newTask.getDueDate());
+        newAlarm.setDueTime(newTask.getDueTime());
+        newAlarm.setAsignedTask(newTask);
+        alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
+        alarmViewModel.insert(newAlarm);
+    }
+
+    private class TaskHolder extends RecyclerView.ViewHolder {
 
         private TextView titleTextView;
         private TextView detailsTextView;
+        private TextView timeTextView;
         private Task task;
         private FloatingActionButton fab;
 
@@ -203,14 +218,13 @@ public class TaskListFragment extends Fragment {
 
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public void bind(Task task) {
             this.task = task;
             titleTextView.setText(task.getTitle());
             detailsTextView.setText(task.getDetails());
+            timeTextView.setText(task.getDueTime().toString());
         }
-
-
-
     }
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
@@ -226,8 +240,9 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskHolder holder, int position){
             Task task = tasks.get(position);
-            TextView titleTextView = holder.getTitleTextView();
-            holder.bind(task);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                holder.bind(task);
+            }
         }
 
         void setTasks(List<Task> tasks) {
