@@ -1,7 +1,12 @@
 package com.example.wakeup.ui.main.fragments;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.content.Context.ALARM_SERVICE;
+
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,20 +29,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wakeup.MainActivity;
 import com.example.wakeup.R;
-import com.example.wakeup.ui.main.activities.TaskListActivity;
+import com.example.wakeup.ui.main.alarms.ReminderReceiver;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
 import com.example.wakeup.ui.main.models.Task;
-import com.example.wakeup.ui.main.models.TaskState;
-import com.google.android.material.datepicker.DateSelector;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class TaskListFragment extends Fragment {
@@ -106,6 +107,7 @@ public class TaskListFragment extends Fragment {
                         newTask.setDetails(details.getText().toString());
                         newTask.setHasReminder(hasReminder.isChecked());
                         newTask.setDueDate(calendar.getTime());
+                        checkReminder(newTask);
                         taskViewModel.insert(newTask);
                     }
                 });
@@ -123,6 +125,7 @@ public class TaskListFragment extends Fragment {
             currDate = currDate.plusDays(1);
             dateTextView.setText(currDate.toString());
         });
+
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
             @Override
@@ -130,13 +133,21 @@ public class TaskListFragment extends Fragment {
                 adapter.setTasks(tasks);
             }
         });
-//        List<Task> sampleData = new ArrayList<>();
-//        sampleData.add(new Task(0, "Task 1", "Details 1", new Date(), false));
-//        sampleData.add(new Task(1, "Task 2", "Details 2", new Date(), true));
-//        sampleData.add(new Task(2, "Task 3", "Details 3", new Date(), false));
-//        adapter.setTasks(sampleData);
 
         return view;
+    }
+
+    private void checkReminder(Task newTask) {
+        if (newTask.getHasReminder()){
+            Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getContext(), ReminderReceiver.class);
+            PendingIntent pendingIntent = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, FLAG_IMMUTABLE);
+            }
+            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
     }
 
     private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -153,11 +164,8 @@ public class TaskListFragment extends Fragment {
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
             itemView.setOnClickListener(this);
-
-
             titleTextView = itemView.findViewById(R.id.task_item_title);
             detailsTextView = itemView.findViewById(R.id.task_item_details);
-
         }
 
         public void bind(Task task) {
@@ -166,13 +174,10 @@ public class TaskListFragment extends Fragment {
             detailsTextView.setText(task.getDetails());
         }
 
-
         @Override
         public void onClick(View v) {
 
         }
-
-
     }
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{

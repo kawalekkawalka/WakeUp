@@ -12,7 +12,7 @@ import com.example.wakeup.ui.main.models.Task;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase databaseInstance;
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
