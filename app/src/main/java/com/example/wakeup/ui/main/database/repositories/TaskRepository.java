@@ -1,16 +1,14 @@
 package com.example.wakeup.ui.main.database.repositories;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Room;
 
 import com.example.wakeup.ui.main.database.AppDatabase;
 import com.example.wakeup.ui.main.database.dao.TaskDao;
 import com.example.wakeup.ui.main.models.Task;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class TaskRepository {
@@ -41,7 +39,7 @@ public class TaskRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> taskDao.delete(task));
     }
 
-    public LiveData<List<Task>> getTaskForDate(Date date) {
+    public LiveData<List<Task>> getTaskForDate(LocalDate date) {
         tasksForDate = taskDao.getTasksForDate(date);
         return tasksForDate;
     }

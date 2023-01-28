@@ -10,8 +10,9 @@ import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 import com.example.wakeup.ui.main.models.Task;
-import com.example.wakeup.ui.main.utils.DateConverter;
+import com.example.wakeup.ui.main.utils.LocalDateConverter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,8 @@ public interface TaskDao {
     @Query("SELECT * FROM task")
     LiveData<List<Task>> getAll();
 
-    @TypeConverters({DateConverter.class})
+
+    @TypeConverters(LocalDateConverter.class)
     @Query("SELECT * FROM task WHERE date(dueDate) = date(:date)")
-    LiveData<List<Task>> getTasksForDate(Date date);
+    LiveData<List<Task>> getTasksForDate(LocalDate date);
 }

@@ -1,14 +1,21 @@
 package com.example.wakeup.ui.main.models;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.wakeup.ui.main.utils.DateConverter;
+import com.example.wakeup.ui.main.utils.LocalDateConverter;
+import com.example.wakeup.ui.main.utils.LocalTimeConverter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 @Entity(tableName = "task")
 public class Task {
     @PrimaryKey(autoGenerate = true)
@@ -18,30 +25,24 @@ public class Task {
 
     private String details;
 
-    @TypeConverters({DateConverter.class})
-    private Date dueDate;
+    @TypeConverters({LocalDateConverter.class})
+    private LocalDate dueDate;
+
+    @TypeConverters({LocalTimeConverter.class})
+    private LocalTime dueTime;
 
     @Ignore
     private TaskState state;
 
     private Boolean hasReminder;
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", dueDate=" + dueDate +
-                ", state=" + state +
-                ", hasReminder=" + hasReminder +
-                '}';
-    }
 
-    public Task(int id, String title, String details, Date dueDate, Boolean hasReminder) {
+    public Task(int id, String title, String details, LocalDate dueDate,LocalTime dueTime, Boolean hasReminder) {
         this.id = id;
         this.title = title;
         this.details = details;
         this.dueDate = dueDate;
+        this.dueTime = dueTime;
         this.hasReminder = hasReminder;
     }
 
@@ -49,6 +50,14 @@ public class Task {
 
     }
 
+
+    public LocalTime getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(LocalTime dueTime) {
+        this.dueTime = dueTime;
+    }
     public int getId() {
         return id;
     }
@@ -73,11 +82,11 @@ public class Task {
         this.details = details;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -95,5 +104,17 @@ public class Task {
 
     public void setHasReminder(Boolean hasReminder) {
         this.hasReminder = hasReminder;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", details='" + details + '\'' +
+                ", dueDate=" + dueDate +
+                ", dueTime=" + dueTime +
+                ", state=" + state +
+                ", hasReminder=" + hasReminder +
+                '}';
     }
 }
