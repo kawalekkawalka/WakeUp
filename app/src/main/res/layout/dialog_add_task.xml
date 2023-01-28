@@ -49,6 +49,19 @@
         android:layout_height="wrap_content"
         android:text="No date selected" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Due hour"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:id="@+id/due_hour_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No hour selected" />
+
     <CheckBox
         android:id="@+id/has_reminder"
         android:layout_width="wrap_content"

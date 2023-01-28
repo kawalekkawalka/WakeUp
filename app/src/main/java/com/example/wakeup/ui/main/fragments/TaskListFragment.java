@@ -1,12 +1,8 @@
 package com.example.wakeup.ui.main.fragments;
 
-import static android.app.PendingIntent.FLAG_IMMUTABLE;
-import static android.content.Context.ALARM_SERVICE;
-
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,15 +25,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wakeup.MainActivity;
 import com.example.wakeup.R;
-import com.example.wakeup.ui.main.alarms.ReminderReceiver;
+import com.example.wakeup.ui.main.activities.TaskListActivity;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
 import com.example.wakeup.ui.main.models.Task;
+import com.example.wakeup.ui.main.models.TaskState;
+import com.google.android.material.datepicker.DateSelector;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class TaskListFragment extends Fragment {
@@ -82,14 +84,30 @@ public class TaskListFragment extends Fragment {
                 final EditText details = dialog.findViewById(R.id.new_task_details);
                 final TextView dueDateText = dialog.findViewById(R.id.due_date_text);
                 final CheckBox hasReminder = dialog.findViewById(R.id.has_reminder);
+                final TextView dueHourText = dialog.findViewById(R.id.due_hour_text);
                 Button addTaskBtn = dialog.findViewById(R.id.btn_add_task);
 
                 DatePickerDialog.OnDateSetListener date = (view1,year, month, day) -> {
                     calendar.set(Calendar.YEAR,year);
                     calendar.set(Calendar.MONTH,month);
                     calendar.set(Calendar.DAY_OF_MONTH,day);
-                    dueDateText.setText(calendar.getTime().toString());
+                    dueDateText.setText(LocalDate.of(year,month+1,day).toString());
+                    newTask.setDueDate(LocalDate.of(year,month+1,day));
                 };
+
+                dueHourText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+                                dueHourText.setText(hourOfDay + ":" + minutes);
+                                newTask.setDueTime(LocalTime.parse(hourOfDay + ":" + minutes));
+                            }
+                        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
+                                .show();
+                    }
+                });
 
                 dueDateText.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -125,7 +143,6 @@ public class TaskListFragment extends Fragment {
             currDate = currDate.plusDays(1);
             dateTextView.setText(currDate.toString());
         });
-
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
             @Override
@@ -133,6 +150,11 @@ public class TaskListFragment extends Fragment {
                 adapter.setTasks(tasks);
             }
         });
+//        List<Task> sampleData = new ArrayList<>();
+//        sampleData.add(new Task(0, "Task 1", "Details 1", new Date(), false));
+//        sampleData.add(new Task(1, "Task 2", "Details 2", new Date(), true));
+//        sampleData.add(new Task(2, "Task 3", "Details 3", new Date(), false));
+//        adapter.setTasks(sampleData);
 
         return view;
     }
@@ -163,9 +185,22 @@ public class TaskListFragment extends Fragment {
 
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return true;
+                }
+            });
+
+            timeTextView = itemView.findViewById(R.id.task_item_time);
             titleTextView = itemView.findViewById(R.id.task_item_title);
             detailsTextView = itemView.findViewById(R.id.task_item_details);
+
         }
 
         public void bind(Task task) {
@@ -174,10 +209,8 @@ public class TaskListFragment extends Fragment {
             detailsTextView.setText(task.getDetails());
         }
 
-        @Override
-        public void onClick(View v) {
 
-        }
+
     }
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{

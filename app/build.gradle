@@ -24,6 +24,7 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
