@@ -101,8 +101,8 @@ public class TaskListFragment extends Fragment {
                         new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
-                                dueHourText.setText(hourOfDay + ":" + minutes);
-                                newTask.setDueTime(LocalTime.parse(hourOfDay + ":" + minutes));
+                                dueHourText.setText(String.format("%02d:%02d", hourOfDay, minutes));
+                                newTask.setDueTime(LocalTime.parse(String.format("%02d:%02d", hourOfDay, minutes)));
                             }
                         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
                                 .show();
@@ -158,6 +158,7 @@ public class TaskListFragment extends Fragment {
         private TextView titleTextView;
         private TextView detailsTextView;
         private TextView timeTextView;
+        private ImageView reminderIcon;
         private Task task;
         private FloatingActionButton fab;
 
@@ -165,6 +166,7 @@ public class TaskListFragment extends Fragment {
             return titleTextView;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -178,10 +180,11 @@ public class TaskListFragment extends Fragment {
                     return true;
                 }
             });
-
+            reminderIcon = itemView.findViewById(R.id.task_reminder_icon);
             timeTextView = itemView.findViewById(R.id.task_item_time);
             titleTextView = itemView.findViewById(R.id.task_item_title);
             detailsTextView = itemView.findViewById(R.id.task_item_details);
+
 
         }
 
@@ -191,6 +194,11 @@ public class TaskListFragment extends Fragment {
             titleTextView.setText(task.getTitle());
             detailsTextView.setText(task.getDetails());
             timeTextView.setText(task.getDueTime().toString());
+            if(task.getHasReminder()){
+                reminderIcon.setVisibility(View.VISIBLE);
+            }else{
+                reminderIcon.setVisibility(View.INVISIBLE);
+            }
         }
 
 
@@ -207,6 +215,7 @@ public class TaskListFragment extends Fragment {
             return new TaskHolder(layoutInflater, parent);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onBindViewHolder(@NonNull TaskHolder holder, int position){
             Task task = tasks.get(position);

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.home:
-                    replaceFragment(new NewsFragment());
+//                    replaceFragment(new NewsFragment());
                     break;
                 case R.id.calendar:
                     replaceFragment(new TaskListFragment());

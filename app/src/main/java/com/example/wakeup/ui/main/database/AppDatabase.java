@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-@Database(entities = {Task.class}, version = 2,autoMigrations = {@AutoMigration(from = 1, to = 2)} )
+@Database(entities = {Task.class}, version = 3,autoMigrations = {@AutoMigration(from = 2, to = 3)} )
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase databaseInstance;
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
