@@ -1,9 +1,9 @@
 package com.example.wakeup.ui.main.controllers.weather;
 
-public class DayWeathercodeDecorator extends WeatherDecorator{
+public class NightWeathercodeDecorator extends WeatherDecorator{
     private String weathercode;
 
-    public DayWeathercodeDecorator(Weather weather, String condition) {
+    public NightWeathercodeDecorator(Weather weather, String condition) {
         super(weather);
         this.weathercode = condition;
     }
@@ -100,6 +100,6 @@ public class DayWeathercodeDecorator extends WeatherDecorator{
         }
 
 
-        return super.printWeather() + weathercodeName + "\n";
+        return super.printWeather() + weathercodeName + " nocą\n";
     }
 }

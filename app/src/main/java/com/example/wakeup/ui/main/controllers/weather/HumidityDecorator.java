@@ -11,7 +11,7 @@ public class HumidityDecorator extends WeatherDecorator{
     }
 
     public String printWeather(){
-        return super.printWeather() + "W dzień " + day_humidity +" wilgotności\n"+
-                "W nocy " + night_humidity +" wilgotności\n";
+        return super.printWeather() + "W dzień " + day_humidity +"% wilgotności\n"+
+                "W nocy " + night_humidity +"% wilgotności\n";
     }
 }

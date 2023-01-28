@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new NewsFragment());
+        replaceFragment(WeatherFragment.newInstance("normal"));
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.home:
                     //replaceFragment(new NewsFragment());
-                    WeatherFragment weatherFragment = WeatherFragment.newInstance("normal");
+                    WeatherFragment weatherFragment = WeatherFragment.newInstance("extended");
                     replaceFragment(weatherFragment);
                     break;
                 case R.id.calendar:
