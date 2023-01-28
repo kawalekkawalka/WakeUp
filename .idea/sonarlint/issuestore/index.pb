@@ -34,9 +34,13 @@ v
 Fapp/src/main/java/com/example/wakeup/ui/main/database/AppDatabase.java,b\1\b1d577acd8c6cfcbb6e7d4665b9ab82b8443a015
 r
 Bapp/src/main/java/com/example/wakeup/ui/main/utils/WeatherApi.java,5\d\5d60692ef994f9a7aefafb1965525350f7e14f3c
-m
-=app/src/main/java/com/example/wakeup/ui/main/models/News.java,4\1\41dd714a0baef259b0f0bd83793b53cf6bba6f86
 v
 Fapp/src/main/java/com/example/wakeup/ui/main/utils/RetrofitClient.java,7\1\71481001245e1f09c57686291bfad079cf5270f5
 m
 =app/src/main/java/com/example/wakeup/ui/main/models/Task.java,9\2\9226ac3c6b225d858338d01fd064e7476162df93
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+f
+6app/src/main/java/com/example/wakeup/MainActivity.java,3\e\3e406bf8591c7d70478c632a02490bbc3e44cdc1
+v
+Fapp/src/main/java/com/example/wakeup/ui/main/news/NewsApiResponse.java,8\0\809215a371a2868ff006ccf66cd96f7699c22489

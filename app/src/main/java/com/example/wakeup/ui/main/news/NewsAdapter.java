@@ -2,6 +2,7 @@ package com.example.wakeup.ui.main.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wakeup.R;
-import com.example.wakeup.ui.main.activities.NewsDetailsActivity;
 import com.example.wakeup.ui.main.models.News;
 
 import java.util.List;
@@ -44,9 +44,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         holder.title.setText(news.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, NewsDetailsActivity.class);
-            intent.putExtra("clicked_news","fantastic news");
-            context.startActivity(intent);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.getUrl()));
+            context.startActivity(browserIntent);
+
         });
     }
 
