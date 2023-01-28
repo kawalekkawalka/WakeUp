@@ -60,3 +60,5 @@ x
 Happ/src/main/java/com/example/wakeup/ui/main/fragments/TaskFragment.java,1\f\1f1d477cc4a9369568cb89545c51b1c0c1b37e4b
 p
 @app/src/main/java/com/example/wakeup/ui/main/utils/ApiProxy.java,9\1\911bfe896f976e2c2cfaad7d201c1c6fc04a2122
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164

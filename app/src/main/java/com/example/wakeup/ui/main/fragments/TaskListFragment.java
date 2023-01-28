@@ -106,7 +106,7 @@ public class TaskListFragment extends Fragment {
                         newTask.setDetails(details.getText().toString());
                         newTask.setHasReminder(hasReminder.isChecked());
                         newTask.setDueDate(calendar.getTime());
-                        System.out.println(newTask.toString());
+                        taskViewModel.insert(newTask);
                     }
                 });
 
@@ -123,18 +123,18 @@ public class TaskListFragment extends Fragment {
             currDate = currDate.plusDays(1);
             dateTextView.setText(currDate.toString());
         });
-//        TaskViewModel model = new ViewModelProvider(this).get(TaskViewModel.class);
-//        model.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
-//            @Override
-//            public void onChanged(List<Task> tasks) {
-//                adapter.setTasks(tasks);
-//            }
-//        });
-        List<Task> sampleData = new ArrayList<>();
-        sampleData.add(new Task(0, "Task 1", "Details 1", new Date(), false));
-        sampleData.add(new Task(1, "Task 2", "Details 2", new Date(), true));
-        sampleData.add(new Task(2, "Task 3", "Details 3", new Date(), false));
-        adapter.setTasks(sampleData);
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                adapter.setTasks(tasks);
+            }
+        });
+//        List<Task> sampleData = new ArrayList<>();
+//        sampleData.add(new Task(0, "Task 1", "Details 1", new Date(), false));
+//        sampleData.add(new Task(1, "Task 2", "Details 2", new Date(), true));
+//        sampleData.add(new Task(2, "Task 3", "Details 3", new Date(), false));
+//        adapter.setTasks(sampleData);
 
         return view;
     }
@@ -176,7 +176,7 @@ public class TaskListFragment extends Fragment {
     }
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
-        private List<Task> tasks;
+        private List<Task> tasks = new ArrayList<>();
 
         @NonNull
         @Override
