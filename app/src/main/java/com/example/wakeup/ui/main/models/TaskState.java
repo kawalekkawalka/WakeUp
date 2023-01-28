@@ -7,6 +7,9 @@ public class TaskState {
     public TaskState(){
 
     }
+    public TaskState(Task task){
+        this.task = task;
+    }
 
     public void clickDone(){
 

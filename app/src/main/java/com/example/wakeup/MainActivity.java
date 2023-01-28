@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+
+import com.example.wakeup.ui.main.fragments.TaskListFragment;
 import com.example.wakeup.databinding.ActivityMainBinding;
 import com.example.wakeup.ui.main.fragments.NewsFragment;
 
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new NewsFragment());
                     break;
                 case R.id.calendar:
-                    //replaceFragment(new CalendarFragment());
+                    replaceFragment(new TaskListFragment());
                     break;
                 case R.id.alarm:
                     //replaceFragment(new AlarmFragment());
