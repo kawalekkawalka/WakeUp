@@ -130,11 +130,6 @@ public class TaskListFragment extends Fragment {
                 adapter.setTasks(tasks);
             }
         });
-//        List<Task> sampleData = new ArrayList<>();
-//        sampleData.add(new Task(0, "Task 1", "Details 1", new Date(), false));
-//        sampleData.add(new Task(1, "Task 2", "Details 2", new Date(), true));
-//        sampleData.add(new Task(2, "Task 3", "Details 3", new Date(), false));
-//        adapter.setTasks(sampleData);
 
         return view;
     }
