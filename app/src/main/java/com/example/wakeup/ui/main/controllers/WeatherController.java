@@ -5,15 +5,26 @@ import static com.example.wakeup.ui.main.utils.Utils.getWeatherFromApi;
 
 import android.util.Log;
 
+import com.example.wakeup.ui.main.controllers.weather.BasicWeather;
+import com.example.wakeup.ui.main.controllers.weather.DayTemperatureDecorator;
+import com.example.wakeup.ui.main.controllers.weather.DayWeathercodeDecorator;
+
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
 
 
 public class WeatherController {
-    public static String getWeather(String type, String Location) throws IOException {
+    public String getNormalWeather(HashMap<String, String> conditions){
         Log.d("Retrofit", "Weszlo w controller");
-        System.out.println(getWeatherFromApi());
-        System.out.println("HHHHHHHHHHHHHHHHHHHHHH");
+        BasicWeather basicWeather = new BasicWeather();
+        DayWeathercodeDecorator dayWeathercodeDecorator = new DayWeathercodeDecorator(
+                new DayTemperatureDecorator(basicWeather, conditions.get("temperature_2m_day")), conditions.get("weathercode_day")
+        );
+        return dayWeathercodeDecorator.printWeather();
+    }
+
+    public String getExtendedWeather(HashMap<String, String> conditions){
+        //use more decorators than normal weather
         return "";
     }
 }

@@ -1,7 +1,5 @@
 package com.example.wakeup.ui.main.activities;
 
-import static com.example.wakeup.ui.main.controllers.WeatherController.getWeather;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,13 +17,7 @@ public class ExtendedWeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extended_weather);
-        try {
-            getWeather("","");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         createFragment();
-
     }
 
     protected void createFragment(){

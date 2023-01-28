@@ -1,5 +1,6 @@
 package com.example.wakeup;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.wakeup.databinding.ActivityMainBinding;
 import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
 import com.example.wakeup.ui.main.fragments.NewsFragment;
+import com.example.wakeup.ui.main.fragments.WeatherFragment;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.home:
-                    replaceFragment(new NewsFragment());
+                    //replaceFragment(new NewsFragment());
+                    WeatherFragment weatherFragment = WeatherFragment.newInstance("normal");
+                    replaceFragment(weatherFragment);
                     break;
                 case R.id.calendar:
                     //replaceFragment(new CalendarFragment());
@@ -43,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
