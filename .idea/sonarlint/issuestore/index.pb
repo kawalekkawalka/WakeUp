@@ -23,3 +23,15 @@ v
 Fapp/src/main/java/com/example/wakeup/ui/main/database/dao/TaskDao.java,8\2\82d0fd3dea0e4defa4ee95401f8e7dff8e2ea686
 †
 Vapp/src/main/java/com/example/wakeup/ui/main/database/repositories/TaskRepository.java,4\1\41d9c5f59ed7c11d6118b501367e597fd66d360a
+q
+Aapp/src/main/java/com/example/wakeup/ui/main/models/TaskOpen.java,7\a\7a0652f8dc3827a44fe3c625eeb636a626e36f65
+w
+Gapp/src/main/java/com/example/wakeup/ui/main/models/TaskInProgress.java,f\a\faee10f08295eee24b5103f87ea61a0b19717991
+u
+Eapp/src/main/java/com/example/wakeup/ui/main/models/TaskFinished.java,5\5\550949600666063073703452f4a7d72dd190d87d
+r
+Bapp/src/main/java/com/example/wakeup/ui/main/models/TaskState.java,7\0\709b915c571b7378addaf698ddb842c7b8777022
+
+Oapp/src/main/java/com/example/wakeup/ui/main/controllers/WeatherController.java,2\5\2539eb6694e82a1f745609f8bbbcab05dadca9ee
+ƒ
+Sapp/src/main/java/com/example/wakeup/ui/main/database/viewmodels/TaskViewModel.java,4\d\4db96f7f23b856eac386f969da1afdffa7c1e07b

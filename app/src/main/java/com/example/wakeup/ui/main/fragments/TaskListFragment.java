@@ -61,6 +61,7 @@ public class TaskListFragment extends Fragment {
     private final Calendar calendar = Calendar.getInstance();
     private static final String KEY_CURRENT_DATE = "currentDate";
     private final CommandHistory commandHistory = CommandHistory.getInstance();
+    private Boolean newTaskAdded = false;
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -185,9 +186,7 @@ public class TaskListFragment extends Fragment {
                         newTask.setDetails(details.getText().toString());
                         newTask.setHasReminder(hasReminder.isChecked());
                         newTask.setState(new TaskOpen(newTask));
-                        List<Task> tasks = adapter.getTasks();
-                        newTask.setId(tasks.get(adapter.getItemCount()-1).getId()+1);
-                        commandHistory.add(new AddCommand(newTask));
+                        newTaskAdded = true;
                         taskViewModel.insert(newTask);
                         dialog.dismiss();
                     }
@@ -221,6 +220,11 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onChanged(List<Task> tasks) {
                 adapter.setTasks(tasks);
+                if(newTaskAdded){
+                    newTaskAdded = false;
+                    newTask.setId(tasks.get(adapter.getItemCount()-1).getId());
+                    commandHistory.add(new AddCommand(newTask));
+                }
             }
         });
     }
