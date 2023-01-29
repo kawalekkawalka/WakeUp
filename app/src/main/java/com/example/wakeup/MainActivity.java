@@ -9,8 +9,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -19,17 +17,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
-import com.example.wakeup.ui.main.fragments.TaskListFragment;
 import com.example.wakeup.databinding.ActivityMainBinding;
+import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
 import com.example.wakeup.ui.main.fragments.NewsFragment;
+import com.example.wakeup.ui.main.fragments.TaskListFragment;
 import com.example.wakeup.ui.main.fragments.WeatherFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_LOCATION_PERMISSION = 100;
@@ -78,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.home:
-                    //replaceFragment(new NewsFragment());
-                    Intent switchActivityIntent = new Intent(this, ExtendedWeatherActivity.class);
-                    startActivity(switchActivityIntent);
+                    replaceFragment(new NewsFragment());
+//                    Intent switchActivityIntent = new Intent(this, ExtendedWeatherActivity.class);
+//                    startActivity(switchActivityIntent);
                     break;
                 case R.id.calendar:
-                    //replaceFragment(new CalendarFragment());
+                    replaceFragment(new TaskListFragment());
                     break;
                 case R.id.alarm:
                     //replaceFragment(new AlarmFragment());

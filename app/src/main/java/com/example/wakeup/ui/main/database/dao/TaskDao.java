@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 import com.example.wakeup.ui.main.models.Task;
-import com.example.wakeup.ui.main.utils.LocalDateConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.LocalDateConverter;
 
 import java.time.LocalDate;
 import java.util.List;

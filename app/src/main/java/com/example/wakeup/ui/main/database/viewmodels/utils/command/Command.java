@@ -1,4 +1,4 @@
-package com.example.wakeup.ui.main.utils.command;
+package com.example.wakeup.ui.main.database.viewmodels.utils.command;
 
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
 import com.example.wakeup.ui.main.models.Task;
