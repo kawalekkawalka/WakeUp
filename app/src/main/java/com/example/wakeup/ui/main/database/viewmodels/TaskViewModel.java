@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.example.wakeup.ui.main.database.repositories.TaskRepository;
 import com.example.wakeup.ui.main.models.Task;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class TaskViewModel extends AndroidViewModel {
         return tasks;
     }
 
-    public LiveData<List<Task>> getTaskForDate(Date date) {
+    public LiveData<List<Task>> getTaskForDate(LocalDate date) {
         return taskRepository.getTaskForDate(date);
     }
 

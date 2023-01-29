@@ -5,9 +5,13 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.wakeup.ui.main.utils.DateConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.LocalDateConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.LocalTimeConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.StateConverter;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 @Entity(tableName = "task")
 public class Task {
@@ -18,37 +22,50 @@ public class Task {
 
     private String details;
 
-    @TypeConverters({DateConverter.class})
-    private Date dueDate;
+    @TypeConverters({LocalDateConverter.class})
+    private LocalDate dueDate;
 
-    @Ignore
+    @TypeConverters({LocalTimeConverter.class})
+    private LocalTime dueTime;
+
+    @TypeConverters({StateConverter.class})
     private TaskState state;
 
     private Boolean hasReminder;
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", dueDate=" + dueDate +
-                ", state=" + state +
-                ", hasReminder=" + hasReminder +
-                '}';
-    }
 
-    public Task(int id, String title, String details, Date dueDate, Boolean hasReminder) {
+    public Task(int id, String title, String details, LocalDate dueDate,LocalTime dueTime, Boolean hasReminder) {
         this.id = id;
         this.title = title;
         this.details = details;
         this.dueDate = dueDate;
+        this.dueTime = dueTime;
         this.hasReminder = hasReminder;
     }
-
+    @Ignore
     public Task() {
 
     }
 
+    @Ignore
+    public Task(Task task){
+        this.id = task.getId();
+        this.title = task.getTitle();
+        this.details = task.getDetails();
+        this.state = task.getState();
+        this.dueDate = task.getDueDate();
+        this.dueTime = task.getDueTime();
+        this.hasReminder = task.getHasReminder();
+    }
+
+
+    public LocalTime getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(LocalTime dueTime) {
+        this.dueTime = dueTime;
+    }
     public int getId() {
         return id;
     }
@@ -73,11 +90,11 @@ public class Task {
         this.details = details;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
