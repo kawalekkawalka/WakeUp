@@ -41,7 +41,6 @@ public class TaskRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> taskDao.delete(task));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Task>> getTaskForDate(LocalDate date) {
         tasksForDate = taskDao.getTasksForDate(date);
         return tasksForDate;

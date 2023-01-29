@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -15,7 +15,7 @@
             android:id="@+id/dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add task"
+            android:text="@string/add_task"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -23,24 +23,39 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/title_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title">
+    </TextView>
+
     <EditText
         android:id="@+id/new_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Title"
+        android:hint="@string/title"
         android:inputType="text" />
+
+    <TextView
+        android:id="@+id/details_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/details">
+    </TextView>
 
     <EditText
         android:id="@+id/new_task_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Details"
+        android:hint="@string/details"
         android:inputType="text" />
 
     <TextView
+        android:id="@+id/due_date_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Due Date"
+        android:text="@string/due_date"
         android:textSize="14sp" />
 
 
@@ -48,12 +63,13 @@
         android:id="@+id/due_date_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No date selected" />
+        android:text="@string/no_date_selected" />
 
     <TextView
+        android:id="@+id/due_hour_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Due hour"
+        android:text="@string/due_hour"
         android:textSize="14sp" />
 
 
@@ -61,13 +77,13 @@
         android:id="@+id/due_hour_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No hour selected" />
+        android:text="@string/no_hour_selected" />
 
     <CheckBox
         android:id="@+id/has_reminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remind me" />
+        android:text="@string/remind_me" />
 
     <Button
         android:id="@+id/btn_add_task"
@@ -76,7 +92,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="#4CAF50"
-        android:text="Add"
+        android:text="@string/add"
         android:textColor="#fff"
         android:textSize="16sp" />
 

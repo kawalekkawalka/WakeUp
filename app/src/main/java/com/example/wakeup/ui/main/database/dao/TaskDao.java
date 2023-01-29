@@ -1,8 +1,5 @@
 package com.example.wakeup.ui.main.database.dao;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -16,7 +13,6 @@ import com.example.wakeup.ui.main.models.Task;
 import com.example.wakeup.ui.main.utils.LocalDateConverter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -30,11 +26,10 @@ public interface TaskDao {
     @Delete
     void delete(Task task);
 
-    @Query("SELECT * FROM task")
+    @Query("SELECT * FROM task ORDER BY title")
     LiveData<List<Task>> getAll();
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @TypeConverters(LocalDateConverter.class)
     @Query("SELECT * FROM task WHERE dueDate = :date")
     LiveData<List<Task>> getTasksForDate(LocalDate date);

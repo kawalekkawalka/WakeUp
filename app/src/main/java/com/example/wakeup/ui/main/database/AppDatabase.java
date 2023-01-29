@@ -11,12 +11,16 @@ import androidx.room.RoomDatabase;
 
 import com.example.wakeup.ui.main.database.dao.TaskDao;
 import com.example.wakeup.ui.main.models.Task;
+import com.example.wakeup.ui.main.models.TaskFinished;
+import com.example.wakeup.ui.main.models.TaskInProgress;
+import com.example.wakeup.ui.main.models.TaskOpen;
+import com.example.wakeup.ui.main.models.TaskState;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-@Database(entities = {Task.class}, version = 3,autoMigrations = {@AutoMigration(from = 2, to = 3)} )
+@Database(entities = {Task.class, TaskState.class, TaskOpen.class, TaskInProgress.class, TaskFinished.class}, version = 5,autoMigrations = {@AutoMigration(from = 4, to = 5)} )
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase databaseInstance;
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
