@@ -1,17 +1,14 @@
 package com.example.wakeup.ui.main.fragments;
 
-import static android.app.PendingIntent.FLAG_IMMUTABLE;
-import static android.content.Context.ALARM_SERVICE;
-
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,7 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,8 +34,9 @@ import com.example.wakeup.ui.main.database.viewmodels.AlarmViewModel;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
 import com.example.wakeup.ui.main.models.Alarm;
 import com.example.wakeup.ui.main.models.Task;
-import com.example.wakeup.ui.main.models.TaskState;
-import com.google.android.material.datepicker.DateSelector;
+import com.example.wakeup.ui.main.models.TaskFinished;
+import com.example.wakeup.ui.main.models.TaskInProgress;
+import com.example.wakeup.ui.main.models.TaskOpen;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -58,19 +56,47 @@ public class TaskListFragment extends Fragment {
     private ImageView nextDateArrow;
     private RecyclerView recyclerView;
     private TaskViewModel taskViewModel;
-    private AlarmViewModel alarmViewModel;
     private LocalDate currDate;
     private FloatingActionButton fab;
     private final Calendar calendar = Calendar.getInstance();
-    public static final String KEY_EXTRA_TASK_ID = "KEY_EXTRA_TASK_ID";
+    public static final String KEY_CURRENT_DATE = "currentDate";
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int taskId = item.getIntent().getIntExtra("taskId", -1);
+        Task task = adapter.getTask(taskId);
+        if (item.getTitle() == "In progress") {
+            task.setState(new TaskInProgress(task));
+            taskViewModel.update(task);
+        } else if (item.getTitle() == "Done") {
+            task.setState(new TaskFinished(task));
+            taskViewModel.update(task);
+        } else if (item.getTitle() == "Delete") {
+            taskViewModel.delete(task);
+        }
+        return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateList();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_CURRENT_DATE,currDate.toString());
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+        super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_task_list,container, false);
-
         currDate = LocalDate.now();
-
+        if(savedInstanceState != null){
+            currDate = LocalDate.parse(savedInstanceState.getString(KEY_CURRENT_DATE));
+        }
         dateTextView = view.findViewById(R.id.date_text_view);
         prevDateArrow = view.findViewById(R.id.previous_day_arrow);
         nextDateArrow = view.findViewById(R.id.next_day_arrow);
@@ -132,26 +158,37 @@ public class TaskListFragment extends Fragment {
                         newTask.setTitle(title.getText().toString());
                         newTask.setDetails(details.getText().toString());
                         newTask.setHasReminder(hasReminder.isChecked());
-                        checkReminder(newTask);
+                        newTask.setState(new TaskOpen(newTask));
                         taskViewModel.insert(newTask);
+                        dialog.dismiss();
                     }
                 });
 
                 dialog.show();
             }
         });
+        updateList();
 
         prevDateArrow.setOnClickListener(v -> {
             currDate = currDate.minusDays(1);
             dateTextView.setText(currDate.toString());
+            updateList();
         });
 
         nextDateArrow.setOnClickListener(v -> {
             currDate = currDate.plusDays(1);
             dateTextView.setText(currDate.toString());
+            updateList();
         });
+
+
+
+        return view;
+    }
+
+    private void updateList() {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+        taskViewModel.getTaskForDate(currDate).observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
                 adapter.setTasks(tasks);
@@ -188,6 +225,7 @@ public class TaskListFragment extends Fragment {
 
     private class TaskHolder extends RecyclerView.ViewHolder {
 
+        private CardView cardView;
         private TextView titleTextView;
         private TextView detailsTextView;
         private TextView timeTextView;
@@ -199,29 +237,15 @@ public class TaskListFragment extends Fragment {
             return titleTextView;
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    return true;
-                }
-            });
             reminderIcon = itemView.findViewById(R.id.task_reminder_icon);
             timeTextView = itemView.findViewById(R.id.task_item_time);
             titleTextView = itemView.findViewById(R.id.task_item_title);
             detailsTextView = itemView.findViewById(R.id.task_item_details);
-
-
+            cardView = itemView.findViewById(R.id.task_cardview);
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         public void bind(Task task) {
             this.task = task;
             titleTextView.setText(task.getTitle());
@@ -232,11 +256,23 @@ public class TaskListFragment extends Fragment {
             }else{
                 reminderIcon.setVisibility(View.INVISIBLE);
             }
+            if(task.getState() instanceof TaskInProgress){
+                cardView.setCardBackgroundColor(Color.parseColor("#F3F781"));
+            }else if(task.getState() instanceof  TaskFinished){
+                cardView.setCardBackgroundColor(Color.parseColor("#58FA82"));
+            }
         }
+
+
     }
 
-    private class TaskAdapter extends RecyclerView.Adapter<TaskHolder>{
+
+    private class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
         private List<Task> tasks = new ArrayList<>();
+
+        public TaskAdapter(){
+            this.tasks = new ArrayList<>();
+        }
 
         @NonNull
         @Override
@@ -249,13 +285,50 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskHolder holder, int position){
             Task task = tasks.get(position);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                holder.bind(task);
-            }
+            holder.bind(task);
+
+            holder.itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                    menu.setHeaderTitle("Choose action");
+                    menu.add(0, 1, 0, "In progress");
+                    menu.add(0,2,0,"Done");
+                    menu.add(0, 3, 0, "Delete");
+                    MenuItem inProgress = menu.findItem(1);
+                    MenuItem done = menu.findItem(2);
+                    MenuItem delete = menu.findItem(3);
+                    Intent intent = new Intent();
+                    intent.putExtra("taskId",position);
+                    inProgress.setIntent(intent);
+                    done.setIntent(intent);
+                    delete.setIntent(intent);
+                }
+            });
+
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    task.getState().edit(taskViewModel,calendar,getActivity(),task);
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    v.showContextMenu();
+                    return true;
+                }
+            });
         }
 
         void setTasks(List<Task> tasks) {
-            this.tasks = tasks;
+            if (tasks == null || tasks.isEmpty()) {
+                this.tasks = new ArrayList<>();
+            } else {
+                this.tasks = tasks;
+            }
             notifyDataSetChanged();
         }
 
@@ -264,5 +337,8 @@ public class TaskListFragment extends Fragment {
             return tasks.size();
         }
 
+        public Task getTask(int taskId) {
+            return tasks.get(taskId);
+        }
     }
 }

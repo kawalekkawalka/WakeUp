@@ -1,8 +1,5 @@
 package com.example.wakeup.ui.main.models;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -10,12 +7,12 @@ import androidx.room.TypeConverters;
 
 import com.example.wakeup.ui.main.utils.LocalDateConverter;
 import com.example.wakeup.ui.main.utils.LocalTimeConverter;
+import com.example.wakeup.ui.main.utils.StateConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
+
 @Entity(tableName = "task")
 public class Task {
     @PrimaryKey(autoGenerate = true)
@@ -31,7 +28,7 @@ public class Task {
     @TypeConverters({LocalTimeConverter.class})
     private LocalTime dueTime;
 
-    @Ignore
+    @TypeConverters({StateConverter.class})
     private TaskState state;
 
     private Boolean hasReminder;
@@ -45,7 +42,7 @@ public class Task {
         this.dueTime = dueTime;
         this.hasReminder = hasReminder;
     }
-
+    @Ignore
     public Task() {
 
     }
@@ -103,17 +100,5 @@ public class Task {
 
     public void setHasReminder(Boolean hasReminder) {
         this.hasReminder = hasReminder;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", dueDate=" + dueDate +
-                ", dueTime=" + dueTime +
-                ", state=" + state +
-                ", hasReminder=" + hasReminder +
-                '}';
     }
 }
