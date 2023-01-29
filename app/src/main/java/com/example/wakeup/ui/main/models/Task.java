@@ -16,7 +16,7 @@ public class Task {
 
     private String title;
 
-    private String subtitle;
+    private String details;
 
     @TypeConverters({DateConverter.class})
     private Date dueDate;
@@ -42,12 +42,12 @@ public class Task {
         this.title = title;
     }
 
-    public String getSubtitle() {
-        return subtitle;
+    public String getDetails() {
+        return details;
     }
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+    public void setDetails(String subtitle) {
+        this.details = subtitle;
     }
 
     public Date getDueDate() {

@@ -48,7 +48,6 @@ public class WeatherFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
         conditionsContainer = rootView.findViewById(R.id.conditions_container);
         ApiProxy proxy = new ApiProxy();
-        Log.d("testy", weatherType);
         proxy.getWeatherData(conditionsContainer, weatherType, latitude, longtitude);
         return rootView;
     }

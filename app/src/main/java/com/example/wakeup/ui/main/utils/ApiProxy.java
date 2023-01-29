@@ -61,6 +61,14 @@ public class ApiProxy {
                     try {
                         FileReader reader = new FileReader("java/com/example/wakeup/ui/main/data/weatherjson");
                         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                        conditions = getConditionsFromJson(json);
+                        WeatherController weatherController = new WeatherController();
+                        if (weatherType == "extended"){
+                            conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
+                        }
+                        else{
+                            conditionsContainer.setText(weatherController.getNormalWeather(conditions));
+                        }
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -71,6 +79,14 @@ public class ApiProxy {
                 try {
                     FileReader reader = new FileReader("java/com/example/wakeup/ui/main/data/weatherjson");
                     JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                    conditions = getConditionsFromJson(json);
+                    WeatherController weatherController = new WeatherController();
+                    if (weatherType == "extended"){
+                        conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
+                    }
+                    else{
+                        conditionsContainer.setText(weatherController.getNormalWeather(conditions));
+                    }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
