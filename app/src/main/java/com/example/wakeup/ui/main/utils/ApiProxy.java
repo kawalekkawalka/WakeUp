@@ -38,10 +38,10 @@ public class ApiProxy {
         return (T) apiServices.get(serviceClass.getName());
     }
 
-    public void getWeatherData(TextView conditionsContainer, String weatherType){
+    public void getWeatherData(TextView conditionsContainer, String weatherType, double latitude, double longtitude){
         WeatherApi apiService = this.createApiService("https://api.open-meteo.com/v1/",WeatherApi.class);
         List<String> hourly = Arrays.asList("temperature_2m", "relativehumidity_2m", "weathercode", "surface_pressure");
-        Call<JsonObject> call = apiService.getWeatherData(53.13, 23.16, hourly);
+        Call<JsonObject> call = apiService.getWeatherData(latitude, longtitude, hourly);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

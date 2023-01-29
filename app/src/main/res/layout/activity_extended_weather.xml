@@ -22,7 +22,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="@string/your_current_location"/>
 
         <ImageView
             android:id="@+id/next_location_arrow"
@@ -36,6 +37,8 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
 
 
 </LinearLayout>
