@@ -1,5 +1,9 @@
 package com.example.wakeup.ui.main.utils;
 
+import android.util.Log;
+import android.widget.TextView;
+
+import com.example.wakeup.ui.main.controllers.WeatherController;
 import android.widget.TextView;
 
 import com.example.wakeup.ui.main.models.News;
@@ -24,7 +28,6 @@ public class ApiProxy {
     private ApiHandler apiHandler;
     private Map<String, Object> apiServices;
     private HashMap<String, String> conditions;
-
 
     public ApiProxy() {
         apiHandler = ApiHandler.getInstance();
@@ -67,16 +70,16 @@ public class ApiProxy {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-//                    Log.d("Retrofit", "Polaczylo z api");
-//                    JsonObject json = response.body();
-//                    conditions = getConditionsFromJson(json);
-//                    WeatherController weatherController = new WeatherController();
-//                    if (weatherType == "extended"){
-//                        conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
-//                    }
-//                    else{
-//                        conditionsContainer.setText(weatherController.getNormalWeather(conditions));
-//                    }
+                    Log.d("Retrofit", "Polaczylo z api");
+                    JsonObject json = response.body();
+                    conditions = getConditionsFromJson(json);
+                    WeatherController weatherController = new WeatherController();
+                    if (weatherType == "extended"){
+                        conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
+                    }
+                    else{
+                        conditionsContainer.setText(weatherController.getNormalWeather(conditions));
+                    }
                 }
                 else {
                     try {
@@ -101,6 +104,7 @@ public class ApiProxy {
             }
         });
     }
+
     private HashMap getConditionsFromJson(JsonObject json){
         JsonObject hourlyData = json.get("hourly").getAsJsonObject();
         JsonArray temporaryArray = hourlyData.get("weathercode").getAsJsonArray();

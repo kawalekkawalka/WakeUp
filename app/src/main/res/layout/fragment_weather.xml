@@ -5,11 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.fragments.WeatherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/clouds"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/container"
-        android:id="@+id/conditonsContainer"/>
+        android:id="@+id/conditions_container"
+        android:textAlignment="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:lineSpacingExtra="10sp"/>
 
 </FrameLayout>
