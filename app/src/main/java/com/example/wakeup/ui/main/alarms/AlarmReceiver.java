@@ -3,23 +3,28 @@ package com.example.wakeup.ui.main.alarms;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.example.wakeup.R;
+
+import java.util.Random;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        String alarmMessage = "Your task should be done!";
 
-        Toast.makeText(context, "Alarm! Wake up! Wake up!", Toast.LENGTH_LONG).show();
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "taskChannel")
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle("Alarm")
+                .setContentText(alarmMessage)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
-
-        ringtone.play();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        Random random = new Random();
+        notificationManager.notify(random.nextInt(), builder.build());
     }
 }

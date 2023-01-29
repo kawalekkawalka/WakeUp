@@ -48,7 +48,7 @@ public class AlarmFragment extends Fragment {
         adapter = new AlarmAdapter();
         recyclerView.setAdapter(adapter);
 
-        alarmViewModel =  new ViewModelProvider(this).get(AlarmViewModel.class);
+        alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
         alarmViewModel.getAllAlarms().observe(getViewLifecycleOwner(), alarms -> adapter.setAlarms(alarms));
 
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
@@ -73,13 +73,13 @@ public class AlarmFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         Toast.makeText(getContext(), "ALARM ON", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(getContext(), AlarmReceiver.class);
-                        alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getLong(ChronoField.MILLI_OF_SECOND) , 60000, alarmIntent);
+                        Intent intent = new Intent(getContext().getApplicationContext(), AlarmReceiver.class);
+                        alarmIntent = PendingIntent.getBroadcast(getContext().getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getLong(ChronoField.MILLI_OF_SECOND), 60000, alarmIntent);
                     } else {
-                        alarmManager.cancel(alarmIntent);
+                        if (alarmManager != null) {
+                            alarmManager.cancel(alarmIntent);
+                        }
                         Toast.makeText(getContext(), "ALARM OFF", Toast.LENGTH_SHORT).show();
                     }
                 }
