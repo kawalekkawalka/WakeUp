@@ -31,4 +31,9 @@
     <string name="edit_task">Edit task</string>
     <string name="edit">Edit</string>
     <string name="add_task">Add task</string>
+    <string name="menu_title">Choose action</string>
+    <string name="menuItem1">In progress</string>
+    <string name="menuItem2">Done</string>
+    <string name="menuItem3">Delete</string>
+    <string name="editingFinishedTask">Cannot edit finished task</string>
 </resources>

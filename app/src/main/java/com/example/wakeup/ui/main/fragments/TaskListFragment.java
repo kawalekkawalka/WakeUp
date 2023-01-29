@@ -67,13 +67,13 @@ public class TaskListFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         int taskId = item.getIntent().getIntExtra("taskId", -1);
         Task task = adapter.getTask(taskId);
-        if (item.getTitle() == "In progress") {
+        if (item.getTitle() == getString(R.string.menuItem1)) {
             task.setState(new TaskInProgress(task));
             taskViewModel.update(task);
-        } else if (item.getTitle() == "Done") {
+        } else if (item.getTitle() == getString(R.string.menuItem2)) {
             task.setState(new TaskFinished(task));
             taskViewModel.update(task);
-        } else if (item.getTitle() == "Delete") {
+        } else if (item.getTitle() == getString(R.string.menuItem3)) {
             taskViewModel.delete(task);
         }
         return true;
@@ -292,10 +292,10 @@ public class TaskListFragment extends Fragment {
             holder.itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                    menu.setHeaderTitle("Choose action");
-                    menu.add(0, 1, 0, "In progress");
-                    menu.add(0,2,0,"Done");
-                    menu.add(0, 3, 0, "Delete");
+                    menu.setHeaderTitle(R.string.menu_title);
+                    menu.add(0, 1, 0, R.string.menuItem1);
+                    menu.add(0,2,0, R.string.menuItem2);
+                    menu.add(0, 3, 0, R.string.menuItem3);
                     MenuItem inProgress = menu.findItem(1);
                     MenuItem done = menu.findItem(2);
                     MenuItem delete = menu.findItem(3);

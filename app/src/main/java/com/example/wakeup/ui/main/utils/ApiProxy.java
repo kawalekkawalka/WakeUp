@@ -1,13 +1,16 @@
 package com.example.wakeup.ui.main.utils;
-import android.util.Log;
 
-import com.example.wakeup.ui.main.utils.ApiHandler;
+import android.widget.TextView;
+
+import com.example.wakeup.ui.main.models.News;
+import com.example.wakeup.ui.main.news.NewsAPI;
+import com.example.wakeup.ui.main.news.NewsApiResponse;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +23,13 @@ import retrofit2.Response;
 public class ApiProxy {
     private ApiHandler apiHandler;
     private Map<String, Object> apiServices;
+    private HashMap<String, String> conditions;
+
 
     public ApiProxy() {
         apiHandler = ApiHandler.getInstance();
         apiServices = new HashMap<>();
+        conditions = new HashMap<String, String>();
     }
 
     private <T> T createApiService(String baseUrl, Class<T> serviceClass) {
@@ -34,36 +40,48 @@ public class ApiProxy {
         return (T) apiServices.get(serviceClass.getName());
     }
 
-    public List getWeatherData(){
-        WeatherApi apiService = this.createApiService("https://api.open-meteo.com/v1/",WeatherApi.class);
+    public void getNewsData(){
+        NewsAPI apiService = this.createApiService("https://newsapi.org/v2/",NewsAPI.class);
+        Call<NewsApiResponse> call = apiService.getNews("us", "0addf20abbe1447199757fcf5281cfd3");
+        call.enqueue(new Callback<NewsApiResponse>() {
+            @Override
+            public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    NewsApiResponse apiResponse = response.body();
+                    List<News> firstThreeArticles = apiResponse.getNews().subList(0,3);
+                }
+            }
 
-        List<String> conditions = new ArrayList<>();
+            @Override
+            public void onFailure(Call<NewsApiResponse> call, Throwable t) {
+                // handle failure
+            }
+        });
+    }
+
+    public void getWeatherData(TextView conditionsContainer, String weatherType, double latitude, double longtitude){
+        WeatherApi apiService = this.createApiService("https://api.open-meteo.com/v1/",WeatherApi.class);
         List<String> hourly = Arrays.asList("temperature_2m", "relativehumidity_2m", "weathercode", "surface_pressure");
-        Call<JsonObject> call = apiService.getWeatherData(53.13, 23.16, hourly);
+        Call<JsonObject> call = apiService.getWeatherData(latitude, longtitude, hourly);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    // Parse the JSON response and extract the temperature and humidity values
-                    Log.d("Retrofit", "Polaczylo z api");
-                    JsonObject json = response.body();
-                    String weatherCode = json.get("timezone").getAsString();
-                    Log.d("Retrofit", weatherCode);
-//                    String temperature = json.get("temperature_2m").getAsString();
-//                    String humidity = json.get("relativehumidity_2m").getAsString();
-//                    String surfacePressure = json.get("surface_pressure").getAsString();
-//                    Collections.addAll(conditions,temperature, humidity, weatherCode, surfacePressure);
+//                    Log.d("Retrofit", "Polaczylo z api");
+//                    JsonObject json = response.body();
+//                    conditions = getConditionsFromJson(json);
+//                    WeatherController weatherController = new WeatherController();
+//                    if (weatherType == "extended"){
+//                        conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
+//                    }
+//                    else{
+//                        conditionsContainer.setText(weatherController.getNormalWeather(conditions));
+//                    }
                 }
                 else {
                     try {
                         FileReader reader = new FileReader("java/com/example/wakeup/ui/main/data/weatherjson");
                         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-                        String weatherCode = json.get("timezone").getAsString();
-                        Log.d("Retrofit", weatherCode);
-//                    String temperature = json.get("temperature_2m").getAsString();
-//                    String humidity = json.get("relativehumidity_2m").getAsString();
-//                    String surfacePressure = json.get("surface_pressure").getAsString();
-//                    Collections.addAll(conditions,temperature, humidity, weatherCode, surfacePressure);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -76,17 +94,27 @@ public class ApiProxy {
                 try {
                     FileReader reader = new FileReader("java/com/example/wakeup/ui/main/data/weatherjson");
                     JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-                    String weatherCode = json.get("timezone").getAsString();
-                    Log.d("Retrofit", weatherCode);
-//                    String temperature = json.get("temperature_2m").getAsString();
-//                    String humidity = json.get("relativehumidity_2m").getAsString();
-//                    String surfacePressure = json.get("surface_pressure").getAsString();
-//                    Collections.addAll(conditions,temperature, humidity, weatherCode, surfacePressure);
+                    conditions = getConditionsFromJson(json);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+    private HashMap getConditionsFromJson(JsonObject json){
+        JsonObject hourlyData = json.get("hourly").getAsJsonObject();
+        JsonArray temporaryArray = hourlyData.get("weathercode").getAsJsonArray();
+        conditions.put("weathercode_day", temporaryArray.get(13).getAsString());
+        conditions.put("weathercode_night", temporaryArray.get(25).getAsString());
+        temporaryArray = hourlyData.get("temperature_2m").getAsJsonArray();
+        conditions.put("temperature_2m_day", temporaryArray.get(13).getAsString());
+        conditions.put("temperature_2m_night", temporaryArray.get(25).getAsString());
+        temporaryArray = hourlyData.get("relativehumidity_2m").getAsJsonArray();
+        conditions.put("relativehumidity_2m_day", temporaryArray.get(13).getAsString());
+        conditions.put("relativehumidity_2m_night", temporaryArray.get(25).getAsString());
+        temporaryArray = hourlyData.get("surface_pressure").getAsJsonArray();
+        conditions.put("surface_pressure_day", temporaryArray.get(13).getAsString());
+        conditions.put("surface_pressure_night", temporaryArray.get(25).getAsString());
         return conditions;
     }
 }

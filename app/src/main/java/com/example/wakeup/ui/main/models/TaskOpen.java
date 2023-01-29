@@ -41,9 +41,9 @@ public class TaskOpen extends TaskState{
         final CheckBox hasReminder = dialog.findViewById(R.id.has_reminder);
         final TextView dueHourText = dialog.findViewById(R.id.due_hour_text);
         final TextView dialogTitle = dialog.findViewById(R.id.dialog_title);
-        dialogTitle.setText("Edit task");
+        dialogTitle.setText(R.string.edit_task);
         Button addTaskBtn = dialog.findViewById(R.id.btn_add_task);
-        addTaskBtn.setText("Edit");
+        addTaskBtn.setText(R.string.edit);
         title.setText(task.getTitle());
         details.setText(task.getDetails());
         dueDateText.setText(task.getDueDate().toString());
