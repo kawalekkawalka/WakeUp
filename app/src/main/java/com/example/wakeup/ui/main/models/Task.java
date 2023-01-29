@@ -47,6 +47,17 @@ public class Task {
 
     }
 
+    @Ignore
+    public Task(Task task){
+        this.id = task.getId();
+        this.title = task.getTitle();
+        this.details = task.getDetails();
+        this.state = task.getState();
+        this.dueDate = task.getDueDate();
+        this.dueTime = task.getDueTime();
+        this.hasReminder = task.getHasReminder();
+    }
+
 
     public LocalTime getDueTime() {
         return dueTime;
