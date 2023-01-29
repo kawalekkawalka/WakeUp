@@ -33,7 +33,6 @@ public class Task {
 
     private Boolean hasReminder;
 
-
     public Task(int id, String title, String details, LocalDate dueDate,LocalTime dueTime, Boolean hasReminder) {
         this.id = id;
         this.title = title;
@@ -43,9 +42,7 @@ public class Task {
         this.hasReminder = hasReminder;
     }
     @Ignore
-    public Task() {
-
-    }
+    public Task() {}
 
     public LocalTime getDueTime() {
         return dueTime;
@@ -54,6 +51,7 @@ public class Task {
     public void setDueTime(LocalTime dueTime) {
         this.dueTime = dueTime;
     }
+
     public int getId() {
         return id;
     }

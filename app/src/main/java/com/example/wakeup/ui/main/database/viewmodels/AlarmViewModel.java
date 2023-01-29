@@ -21,7 +21,6 @@ public class AlarmViewModel extends AndroidViewModel {
     private final AlarmRepository alarmRepository;
     private final LiveData<List<Alarm>> alarms;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public AlarmViewModel(@NonNull Application application) {
         super(application);
         alarmRepository = new AlarmRepository(application);
@@ -32,15 +31,12 @@ public class AlarmViewModel extends AndroidViewModel {
         return alarms;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void insert(Alarm alarm) {
         alarmRepository.insert(alarm);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void update(Alarm alarm) { alarmRepository.update(alarm); }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void delete(Alarm alarm) {
         alarmRepository.delete(alarm);
     }

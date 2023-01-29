@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wakeup.R;
-import com.example.wakeup.ui.main.alarms.ReminderReceiver;
 import com.example.wakeup.ui.main.database.viewmodels.AlarmViewModel;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
 import com.example.wakeup.ui.main.models.Alarm;
@@ -40,11 +38,9 @@ import com.example.wakeup.ui.main.models.TaskOpen;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class TaskListFragment extends Fragment {
@@ -56,9 +52,11 @@ public class TaskListFragment extends Fragment {
     private ImageView nextDateArrow;
     private RecyclerView recyclerView;
     private TaskViewModel taskViewModel;
+    private AlarmViewModel alarmViewModel;
     private LocalDate currDate;
     private FloatingActionButton fab;
     private final Calendar calendar = Calendar.getInstance();
+    private Boolean taskNeedsAlarm = false;
     public static final String KEY_CURRENT_DATE = "currentDate";
 
     @Override
@@ -78,23 +76,23 @@ public class TaskListFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         updateList();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_CURRENT_DATE,currDate.toString());
+        outState.putString(KEY_CURRENT_DATE, currDate.toString());
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_task_list,container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         currDate = LocalDate.now();
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             currDate = LocalDate.parse(savedInstanceState.getString(KEY_CURRENT_DATE));
         }
         dateTextView = view.findViewById(R.id.date_text_view);
@@ -121,12 +119,12 @@ public class TaskListFragment extends Fragment {
                 final TextView dueHourText = dialog.findViewById(R.id.due_hour_text);
                 Button addTaskBtn = dialog.findViewById(R.id.btn_add_task);
 
-                DatePickerDialog.OnDateSetListener date = (view1,year, month, day) -> {
-                    calendar.set(Calendar.YEAR,year);
-                    calendar.set(Calendar.MONTH,month);
-                    calendar.set(Calendar.DAY_OF_MONTH,day);
-                    dueDateText.setText(LocalDate.of(year,month+1,day).toString());
-                    newTask.setDueDate(LocalDate.of(year,month+1,day));
+                DatePickerDialog.OnDateSetListener date = (view1, year, month, day) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+                    dueDateText.setText(LocalDate.of(year, month + 1, day).toString());
+                    newTask.setDueDate(LocalDate.of(year, month + 1, day));
                 };
 
                 dueHourText.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +158,7 @@ public class TaskListFragment extends Fragment {
                         newTask.setHasReminder(hasReminder.isChecked());
                         newTask.setState(new TaskOpen(newTask));
                         taskViewModel.insert(newTask);
+                        checkReminder(newTask);
                         dialog.dismiss();
                     }
                 });
@@ -181,8 +180,6 @@ public class TaskListFragment extends Fragment {
             updateList();
         });
 
-
-
         return view;
     }
 
@@ -192,46 +189,40 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onChanged(List<Task> tasks) {
                 adapter.setTasks(tasks);
+                if (taskNeedsAlarm) {
+                    createNewAlarm(adapter.getTasks().get(adapter.getItemCount()-1));
+                }
             }
         });
-
-        return view;
     }
 
     private void checkReminder(Task newTask) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (newTask.getHasReminder()){
-                createNewAlarm(newTask);
-                Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext(), ReminderReceiver.class);
-                PendingIntent pendingIntent = null;
-                pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, FLAG_IMMUTABLE);
-                AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10000, pendingIntent);
-            }
+        if (newTask.getHasReminder()) {
+            taskNeedsAlarm = true;
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void createNewAlarm(Task newTask) {
         Alarm newAlarm = new Alarm();
         newAlarm.setActive(false);
         newAlarm.setDueDate(newTask.getDueDate());
         newAlarm.setDueTime(newTask.getDueTime());
-        newAlarm.setAsignedTask(newTask);
+        newAlarm.setTaskId(newTask.getId());
+
         alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
         alarmViewModel.insert(newAlarm);
+        taskNeedsAlarm = false;
     }
 
     private class TaskHolder extends RecyclerView.ViewHolder {
 
-        private CardView cardView;
         private TextView titleTextView;
         private TextView detailsTextView;
         private TextView timeTextView;
         private ImageView reminderIcon;
         private Task task;
         private FloatingActionButton fab;
+        private CardView cardView;
 
         public TextView getTitleTextView() {
             return titleTextView;
@@ -251,39 +242,35 @@ public class TaskListFragment extends Fragment {
             titleTextView.setText(task.getTitle());
             detailsTextView.setText(task.getDetails());
             timeTextView.setText(task.getDueTime().toString());
-            if(task.getHasReminder()){
+            if (task.getHasReminder()) {
                 reminderIcon.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 reminderIcon.setVisibility(View.INVISIBLE);
             }
-            if(task.getState() instanceof TaskInProgress){
+            if (task.getState() instanceof TaskInProgress) {
                 cardView.setCardBackgroundColor(Color.parseColor("#F3F781"));
-            }else if(task.getState() instanceof  TaskFinished){
+            } else if (task.getState() instanceof TaskFinished) {
                 cardView.setCardBackgroundColor(Color.parseColor("#58FA82"));
             }
         }
-
-
     }
-
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
         private List<Task> tasks = new ArrayList<>();
 
-        public TaskAdapter(){
+        public TaskAdapter() {
             this.tasks = new ArrayList<>();
         }
 
         @NonNull
         @Override
-        public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+        public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             return new TaskHolder(layoutInflater, parent);
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
-        public void onBindViewHolder(@NonNull TaskHolder holder, int position){
+        public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
             Task task = tasks.get(position);
             holder.bind(task);
 
@@ -292,13 +279,13 @@ public class TaskListFragment extends Fragment {
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
                     menu.setHeaderTitle("Choose action");
                     menu.add(0, 1, 0, "In progress");
-                    menu.add(0,2,0,"Done");
+                    menu.add(0, 2, 0, "Done");
                     menu.add(0, 3, 0, "Delete");
                     MenuItem inProgress = menu.findItem(1);
                     MenuItem done = menu.findItem(2);
                     MenuItem delete = menu.findItem(3);
                     Intent intent = new Intent();
-                    intent.putExtra("taskId",position);
+                    intent.putExtra("taskId", position);
                     inProgress.setIntent(intent);
                     done.setIntent(intent);
                     delete.setIntent(intent);
@@ -306,11 +293,10 @@ public class TaskListFragment extends Fragment {
             });
 
 
-
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    task.getState().edit(taskViewModel,calendar,getActivity(),task);
+                    task.getState().edit(taskViewModel, calendar, getActivity(), task);
                 }
             });
 
@@ -333,12 +319,16 @@ public class TaskListFragment extends Fragment {
         }
 
         @Override
-        public int getItemCount(){
+        public int getItemCount() {
             return tasks.size();
         }
 
         public Task getTask(int taskId) {
             return tasks.get(taskId);
+        }
+
+        public List<Task> getTasks() {
+            return tasks;
         }
     }
 }

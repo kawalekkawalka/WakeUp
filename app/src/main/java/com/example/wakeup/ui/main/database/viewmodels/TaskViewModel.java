@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.room.Insert;
 
 import com.example.wakeup.ui.main.database.repositories.TaskRepository;
 import com.example.wakeup.ui.main.models.Task;
@@ -20,7 +21,6 @@ public class TaskViewModel extends AndroidViewModel {
     private final TaskRepository taskRepository;
     private final LiveData<List<Task>> tasks;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public TaskViewModel(@NonNull Application application) {
         super(application);
         taskRepository = new TaskRepository(application);
@@ -35,17 +35,18 @@ public class TaskViewModel extends AndroidViewModel {
         return taskRepository.getTaskForDate(date);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LiveData<Task> getTaskById(int taskId) {
+        return taskRepository.getTaskById(taskId);
+    }
+
     public void insert(Task task) {
         taskRepository.insert(task);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void update(Task task) {
         taskRepository.update(task);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void delete(Task task) {
         taskRepository.delete(task);
     }

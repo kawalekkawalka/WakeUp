@@ -1,9 +1,7 @@
 package com.example.wakeup.ui.main.models;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -14,8 +12,7 @@ import com.example.wakeup.ui.main.utils.LocalTimeConverter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
-@Entity(tableName = "alarm")
+@Entity(tableName = "alarm", foreignKeys = {@ForeignKey(entity = Task.class, parentColumns = "id", childColumns = "taskId", onDelete = ForeignKey.CASCADE)} )
 public class Alarm {
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -28,6 +25,8 @@ public class Alarm {
 
     @Ignore
     private Task asignedTask;
+
+    private int taskId;
 
     public Task getAsignedTask() {
         return asignedTask;
@@ -67,5 +66,13 @@ public class Alarm {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 }

@@ -17,7 +17,6 @@ public class AlarmRepository {
     private final AlarmDao alarmDao;
     private final LiveData<List<Alarm>> allAlarms;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public AlarmRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         alarmDao = db.alarmDao();
@@ -26,17 +25,14 @@ public class AlarmRepository {
 
     public LiveData<List<Alarm>> getAllAlarms() { return allAlarms; }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void insert(Alarm alarm) {
         AppDatabase.databaseWriteExecutor.execute(() -> alarmDao.insert(alarm));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void update(Alarm alarm) {
         AppDatabase.databaseWriteExecutor.execute(() -> alarmDao.update(alarm));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void delete(Alarm alarm) {
         AppDatabase.databaseWriteExecutor.execute(() -> alarmDao.delete(alarm));
     }
