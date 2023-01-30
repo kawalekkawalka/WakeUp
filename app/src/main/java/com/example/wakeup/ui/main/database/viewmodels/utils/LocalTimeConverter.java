@@ -1,4 +1,4 @@
-package com.example.wakeup.ui.main.utils;
+package com.example.wakeup.ui.main.database.viewmodels.utils;
 
 import android.os.Build;
 

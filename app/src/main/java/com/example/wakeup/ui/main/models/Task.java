@@ -5,9 +5,9 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.wakeup.ui.main.utils.LocalDateConverter;
-import com.example.wakeup.ui.main.utils.LocalTimeConverter;
-import com.example.wakeup.ui.main.utils.StateConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.LocalDateConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.LocalTimeConverter;
+import com.example.wakeup.ui.main.database.viewmodels.utils.StateConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,6 +33,7 @@ public class Task {
 
     private Boolean hasReminder;
 
+
     public Task(int id, String title, String details, LocalDate dueDate,LocalTime dueTime, Boolean hasReminder) {
         this.id = id;
         this.title = title;
@@ -42,7 +43,21 @@ public class Task {
         this.hasReminder = hasReminder;
     }
     @Ignore
-    public Task() {}
+    public Task() {
+
+    }
+
+    @Ignore
+    public Task(Task task){
+        this.id = task.getId();
+        this.title = task.getTitle();
+        this.details = task.getDetails();
+        this.state = task.getState();
+        this.dueDate = task.getDueDate();
+        this.dueTime = task.getDueTime();
+        this.hasReminder = task.getHasReminder();
+    }
+
 
     public LocalTime getDueTime() {
         return dueTime;

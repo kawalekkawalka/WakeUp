@@ -21,7 +21,7 @@ import com.example.wakeup.ui.main.models.TaskState;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Task.class, TaskState.class, TaskOpen.class, TaskInProgress.class, TaskFinished.class, Alarm.class}, version = 6,autoMigrations = {@AutoMigration(from = 5, to = 6)} )
+@Database(entities = {Task.class, TaskState.class, TaskOpen.class, TaskInProgress.class, TaskFinished.class}, version = 5,autoMigrations = {@AutoMigration(from = 4, to = 5)} )
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase databaseInstance;
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();

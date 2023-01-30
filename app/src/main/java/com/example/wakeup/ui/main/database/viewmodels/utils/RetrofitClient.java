@@ -1,4 +1,4 @@
-package com.example.wakeup.ui.main.utils;
+package com.example.wakeup.ui.main.database.viewmodels.utils;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

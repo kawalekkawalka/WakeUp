@@ -16,7 +16,7 @@ import com.example.wakeup.ui.main.models.News;
 import com.example.wakeup.ui.main.news.NewsApiResponse;
 import com.example.wakeup.ui.main.news.NewsAdapter;
 import com.example.wakeup.ui.main.news.NewsAPI;
-import com.example.wakeup.ui.main.utils.RetrofitClient;
+import com.example.wakeup.ui.main.database.viewmodels.utils.RetrofitClient;
 
 import java.util.List;
 
@@ -37,7 +37,6 @@ public class NewsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NewsAdapter(getContext());
         recyclerView.setAdapter(adapter);
-
         Retrofit retrofit = RetrofitClient.getRetrofitInstance();
         NewsAPI newsAPI = retrofit.create(NewsAPI.class);
 

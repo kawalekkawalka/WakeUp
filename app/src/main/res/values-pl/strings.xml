@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WakeUp!</string>
+    <string name="container">Twoja pogoda</string>
+    <string name="name_hint">Wprowadz nazwe zadania</string>
+    <string name="name_label">Nazwa</string>
+    <string name="details_label">Opis</string>
+    <string name="done_label">Skończony</string>
+    <string name="task_add_new">Nowe zadanie</string>
+    <string name="NewsTitle">Interesujące dzisiejsze wydarzenia</string>
+    <string name="alarm">Alarm</string>
+    <string name="calendar">Kalendarz</string>
+    <string name="home">Ekran główny</string>
+    <string name="next">Następny</string>
+    <string name="previous">Poprzedni</string>
+    <string name="news_click">Kliknij wydarzenie, aby zobaczyć więcej</string>
+    <string name="title">Tytuł</string>
+    <string name="details">Opis</string>
+    <string name="due_date">Data końcowa</string>
+    <string name="no_date_selected">Nie wybrano daty</string>
+    <string name="due_hour">Godzina zakończenia</string>
+    <string name="no_hour_selected">Nie wybrano godziny</string>
+    <string name="remind_me">Przypomnij mi</string>
+    <string name="add">Dodaj</string>
+    <string name="edit_task">Edytuj Zadanie</string>
+    <string name="edit">Edytuj</string>
+    <string name="add_task">Dodaj zadanie</string>
+    <string name="menu_title">Wybierz opcję</string>
+    <string name="menuItem1">W trakcie</string>
+    <string name="menuItem2">Zakończone</string>
+    <string name="menuItem3">Usuń</string>
+    <string name="editingFinishedTask">Nie można edytować zakończonego zadania</string>
+</resources>
