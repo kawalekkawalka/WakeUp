@@ -25,6 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Locale;
+
 public class MapFragment extends Fragment {
 
     private LocationViewModel locationViewModel;
@@ -57,8 +59,8 @@ public class MapFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 newLocation.setName(name.getText().toString());
-                                newLocation.setLatitude(Double.valueOf(String.format("%.2f", Double.valueOf(latitude.getText().toString()))));
-                                newLocation.setLongtitude(Double.valueOf(String.format("%.2f", Double.valueOf(longtitude.getText().toString()))));
+                                newLocation.setLatitude(Double.valueOf(String.format(Locale.US,"%.2f", Double.valueOf(latitude.getText().toString()))));
+                                newLocation.setLongtitude(Double.valueOf(String.format(Locale.US,"%.2f", Double.valueOf(longtitude.getText().toString()))));
                                 locationViewModel = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
                                 locationViewModel.insert(newLocation);
                                 dialog.dismiss();

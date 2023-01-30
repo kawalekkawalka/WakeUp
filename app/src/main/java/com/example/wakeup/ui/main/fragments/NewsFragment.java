@@ -42,7 +42,7 @@ public class NewsFragment extends Fragment {
         NewsAPI newsAPI = retrofit.create(NewsAPI.class);
 
 
-        Call<NewsApiResponse> call = newsAPI.getNews("us", "0addf20abbe1447199757fcf5281cfd3");
+        Call<NewsApiResponse> call = newsAPI.getNews("us", getString(R.string.news_api));
         call.enqueue(new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {

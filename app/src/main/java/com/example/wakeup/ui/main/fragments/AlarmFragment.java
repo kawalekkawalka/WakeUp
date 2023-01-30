@@ -75,7 +75,7 @@ public class AlarmFragment extends Fragment {
                         Toast.makeText(getContext(), "ALARM ON", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext().getApplicationContext(), AlarmReceiver.class);
                         alarmIntent = PendingIntent.getBroadcast(getContext().getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getLong(ChronoField.MILLI_OF_SECOND), 60000, alarmIntent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime.getLong(ChronoField.MILLI_OF_SECOND), alarmIntent);
                     } else {
                         if (alarmManager != null) {
                             alarmManager.cancel(alarmIntent);
