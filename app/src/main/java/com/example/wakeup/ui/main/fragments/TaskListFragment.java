@@ -33,6 +33,9 @@ import com.example.wakeup.ui.main.models.Task;
 import com.example.wakeup.ui.main.models.TaskFinished;
 import com.example.wakeup.ui.main.models.TaskInProgress;
 import com.example.wakeup.ui.main.models.TaskOpen;
+import com.example.wakeup.ui.main.database.viewmodels.utils.command.AddCommand;
+import com.example.wakeup.ui.main.database.viewmodels.utils.command.CommandHistory;
+import com.example.wakeup.ui.main.database.viewmodels.utils.command.EditCommand;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -51,21 +54,26 @@ public class TaskListFragment extends Fragment {
     private RecyclerView recyclerView;
     private TaskViewModel taskViewModel;
     private LocalDate currDate;
-    private FloatingActionButton fab;
+    private FloatingActionButton fabAdd;
+    private FloatingActionButton fabUndo;
+    private FloatingActionButton fabMenu;
+    private Boolean isFabMenuVisible = false;
     private final Calendar calendar = Calendar.getInstance();
-    public static final String KEY_CURRENT_DATE = "currentDate";
+    private static final String KEY_CURRENT_DATE = "currentDate";
+    private final CommandHistory commandHistory = CommandHistory.getInstance();
+    private Boolean newTaskAdded = false;
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int taskId = item.getIntent().getIntExtra("taskId", -1);
         Task task = adapter.getTask(taskId);
-        if (item.getTitle() == "In progress") {
+        if (item.getTitle() == getString(R.string.menuItem1)) {
             task.setState(new TaskInProgress(task));
             taskViewModel.update(task);
-        } else if (item.getTitle() == "Done") {
+        } else if (item.getTitle() == getString(R.string.menuItem2)) {
             task.setState(new TaskFinished(task));
             taskViewModel.update(task);
-        } else if (item.getTitle() == "Delete") {
+        } else if (item.getTitle() == getString(R.string.menuItem3)) {
             taskViewModel.delete(task);
         }
         return true;
@@ -100,8 +108,34 @@ public class TaskListFragment extends Fragment {
         adapter = new TaskAdapter();
         recyclerView.setAdapter(adapter);
 
-        fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabAdd = view.findViewById(R.id.fab);
+        fabUndo = view.findViewById(R.id.fab_undo);
+        fabMenu = view.findViewById(R.id.menu_fab);
+        fabUndo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!commandHistory.isEmpty()){
+                    commandHistory.getTop().undo(taskViewModel);
+                    commandHistory.pop();
+                }
+            }
+        });
+
+        fabMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFabMenuVisible) {
+                    fabAdd.hide();
+                    fabUndo.hide();
+                    isFabMenuVisible = false;
+                } else {
+                    fabAdd.show();
+                    fabUndo.show();
+                    isFabMenuVisible = true;
+                }
+            }
+        });
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 newTask = new Task();
@@ -152,6 +186,7 @@ public class TaskListFragment extends Fragment {
                         newTask.setDetails(details.getText().toString());
                         newTask.setHasReminder(hasReminder.isChecked());
                         newTask.setState(new TaskOpen(newTask));
+                        newTaskAdded = true;
                         taskViewModel.insert(newTask);
                         dialog.dismiss();
                     }
@@ -185,6 +220,11 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onChanged(List<Task> tasks) {
                 adapter.setTasks(tasks);
+                if(newTaskAdded){
+                    newTaskAdded = false;
+                    newTask.setId(tasks.get(adapter.getItemCount()-1).getId());
+                    commandHistory.add(new AddCommand(newTask));
+                }
             }
         });
     }
@@ -198,10 +238,6 @@ public class TaskListFragment extends Fragment {
         private ImageView reminderIcon;
         private Task task;
         private FloatingActionButton fab;
-
-        public TextView getTitleTextView() {
-            return titleTextView;
-        }
 
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
@@ -235,6 +271,7 @@ public class TaskListFragment extends Fragment {
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
         private List<Task> tasks = new ArrayList<>();
+        private final CommandHistory commandHistory = CommandHistory.getInstance();
 
         public TaskAdapter(){
             this.tasks = new ArrayList<>();
@@ -255,10 +292,10 @@ public class TaskListFragment extends Fragment {
             holder.itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                    menu.setHeaderTitle("Choose action");
-                    menu.add(0, 1, 0, "In progress");
-                    menu.add(0,2,0,"Done");
-                    menu.add(0, 3, 0, "Delete");
+                    menu.setHeaderTitle(R.string.menu_title);
+                    menu.add(0, 1, 0, R.string.menuItem1);
+                    menu.add(0,2,0, R.string.menuItem2);
+                    menu.add(0, 3, 0, R.string.menuItem3);
                     MenuItem inProgress = menu.findItem(1);
                     MenuItem done = menu.findItem(2);
                     MenuItem delete = menu.findItem(3);
@@ -275,6 +312,7 @@ public class TaskListFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    commandHistory.add(new EditCommand(new Task(task)));
                     task.getState().edit(taskViewModel,calendar,getActivity(),task);
                 }
             });
@@ -304,6 +342,10 @@ public class TaskListFragment extends Fragment {
 
         public Task getTask(int taskId) {
             return tasks.get(taskId);
+        }
+
+        public List<Task> getTasks(){
+            return tasks;
         }
     }
 }

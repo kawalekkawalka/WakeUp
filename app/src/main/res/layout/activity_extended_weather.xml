@@ -4,15 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome to the new activity!" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/previous_location_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_left" />
+
+        <TextView
+            android:id="@+id/location_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/your_current_location"/>
+
+        <ImageView
+            android:id="@+id/next_location_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right" />
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
 
 
 </LinearLayout>

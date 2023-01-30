@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import androidx.room.Entity;
 
+import com.example.wakeup.R;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
 
 import java.util.Calendar;
@@ -21,6 +22,6 @@ public class TaskFinished extends TaskState {
 
     @Override
     public void edit(TaskViewModel taskViewModel, Calendar calendar, Context context,Task task) {
-        Toast.makeText(context, "Cannot edit finished task", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.editingFinishedTask, Toast.LENGTH_SHORT).show();
     }
 }
