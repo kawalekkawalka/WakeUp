@@ -21,8 +21,6 @@ z
 Japp/src/main/java/com/example/wakeup/ui/main/utils/LocalTimeConverter.java,9\4\9481d106b5400976cc9f57ca8a606c775664378b
 v
 Fapp/src/main/java/com/example/wakeup/ui/main/database/dao/TaskDao.java,8\2\82d0fd3dea0e4defa4ee95401f8e7dff8e2ea686
-|
-Lapp/src/main/java/com/example/wakeup/ui/main/fragments/TaskListFragment.java,9\5\952e6cdee50a4c4a6e5774d65a5c4ec4c132d13e
 †
 Vapp/src/main/java/com/example/wakeup/ui/main/database/repositories/TaskRepository.java,4\1\41d9c5f59ed7c11d6118b501367e597fd66d360a
 ƒ
