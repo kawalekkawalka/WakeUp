@@ -24,6 +24,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.wakeup.R;
 import com.example.wakeup.ui.main.database.viewmodels.LocationViewModel;
@@ -46,24 +48,52 @@ public class ExtendedWeatherActivity extends AppCompatActivity {
     private FloatingActionButton addLocationButton;
     private LocationViewModel locationViewModel;
     private List<UserLocation> allLocations;
+    private ImageView prevLocationArrow;
+    private ImageView nextLocationArrow;
+    private UserLocation currentLocation;
+    private TextView locationTextView;
+    private int currentLocationIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extended_weather);
+        locationTextView = findViewById(R.id.location_text_view);
         addLocationButton = findViewById(R.id.add_location_button);
+        prevLocationArrow = findViewById(R.id.previous_location_arrow);
+        nextLocationArrow = findViewById(R.id.next_location_arrow);
         addLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MapFragment fragment = new MapFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.commit();
+                replaceFragment(fragment);
                 }
         });
 
+        currentLocationIndex = 0;
+        prevLocationArrow.setOnClickListener(v -> {
+            if (1 == currentLocationIndex){
+                getCurrentLocation();
+                currentLocationIndex--;
+            }
+            if (1 < currentLocationIndex){
+                currentLocationIndex--;
+                currentLocation = allLocations.get(currentLocationIndex - 1);
+                WeatherFragment fragment = WeatherFragment.newInstance("extended", currentLocation.getLatitude(), currentLocation.getLongtitude());
+                locationTextView.setText(currentLocation.getName());
+                replaceFragment(fragment);
+            }
+        });
 
+        nextLocationArrow.setOnClickListener(v -> {
+            if (allLocations.size() > currentLocationIndex){
+                currentLocationIndex++;
+                currentLocation = allLocations.get(currentLocationIndex - 1);
+                WeatherFragment fragment = WeatherFragment.newInstance("extended", currentLocation.getLatitude(), currentLocation.getLongtitude());
+                locationTextView.setText(currentLocation.getName());
+                replaceFragment(fragment);
+            }
+        });
         createFragment();
     }
 
@@ -105,18 +135,21 @@ public class ExtendedWeatherActivity extends AppCompatActivity {
             if (location != null) {
                 lastLocation = location;
                 WeatherFragment fragment = WeatherFragment.newInstance("extended", lastLocation.getLatitude(), lastLocation.getLongitude());
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_container, fragment);
-                fragmentTransaction.commit();
+                locationTextView.setText("Your current location");
+                replaceFragment(fragment);
             }
         });
+    }
+
+    protected void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
     }
 
     protected void createFragment(){
         getCurrentLocation();
         updateList();
-
-
     }
 }

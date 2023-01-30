@@ -1,6 +1,7 @@
 package com.example.wakeup.ui.main.fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.wakeup.R;
+import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
 import com.example.wakeup.ui.main.database.viewmodels.LocationViewModel;
 import com.example.wakeup.ui.main.models.UserLocation;
 import com.google.android.gms.maps.GoogleMap;
@@ -59,8 +61,9 @@ public class MapFragment extends Fragment {
                                 newLocation.setLongtitude(Double.valueOf(String.format("%.2f", Double.valueOf(longtitude.getText().toString()))));
                                 locationViewModel = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
                                 locationViewModel.insert(newLocation);
-                                Log.d("weather", "wchodziiiiiii");
                                 dialog.dismiss();
+                                Intent switchActivityIntent = new Intent(getActivity(), ExtendedWeatherActivity.class);
+                                startActivity(switchActivityIntent);
                             }
                         });
                         dialog.show();

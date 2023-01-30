@@ -9,6 +9,6 @@ public class DayTemperatureDecorator extends WeatherDecorator{
     }
 
     public String printWeather(){
-        return super.printWeather() + temperature + " stopni Celsjusza\n";
+        return super.printWeather() + temperature + " °C during tha day\n";
     }
 }
