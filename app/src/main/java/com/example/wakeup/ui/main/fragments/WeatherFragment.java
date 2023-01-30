@@ -10,12 +10,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.wakeup.R;
-import com.example.wakeup.ui.main.controllers.WeatherController;
-import com.example.wakeup.ui.main.database.viewmodels.utils.ApiProxy;
-import com.example.wakeup.ui.main.database.viewmodels.utils.command.NetUtils;
-import com.google.gson.JsonObject;
-
-import java.util.HashMap;
+import com.example.wakeup.ui.main.utils.ApiProxy;
 
 public class WeatherFragment extends Fragment {
 
@@ -52,24 +47,9 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
         conditionsContainer = rootView.findViewById(R.id.conditions_container);
-        ApiProxy proxy = new ApiProxy(getContext());
+        ApiProxy proxy = new ApiProxy();
         Log.d("testy", weatherType);
-        JsonObject json = null;
-        try {
-            json = proxy.getWeatherData(latitude, longtitude);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        HashMap<String,String> conditions = new HashMap<>();
-        conditions = NetUtils.getConditionsFromJson(json,conditions);
-        WeatherController weatherController = new WeatherController();
-        if (weatherType == "extended"){
-            conditionsContainer.setText(weatherController.getExtendedWeather(conditions));
-        }
-        else{
-            conditionsContainer.setText(weatherController.getNormalWeather(conditions));
-        }
+        proxy.getWeatherData(conditionsContainer, weatherType, latitude, longtitude);
         return rootView;
     }
-
 }

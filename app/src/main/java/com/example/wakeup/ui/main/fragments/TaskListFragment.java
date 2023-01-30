@@ -33,9 +33,9 @@ import com.example.wakeup.ui.main.models.Task;
 import com.example.wakeup.ui.main.models.TaskFinished;
 import com.example.wakeup.ui.main.models.TaskInProgress;
 import com.example.wakeup.ui.main.models.TaskOpen;
-import com.example.wakeup.ui.main.database.viewmodels.utils.command.AddCommand;
-import com.example.wakeup.ui.main.database.viewmodels.utils.command.CommandHistory;
-import com.example.wakeup.ui.main.database.viewmodels.utils.command.EditCommand;
+import com.example.wakeup.ui.main.utils.command.AddCommand;
+import com.example.wakeup.ui.main.utils.command.CommandHistory;
+import com.example.wakeup.ui.main.utils.command.EditCommand;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.example.wakeup.ui.main.database.viewmodels.utils;
+package com.example.wakeup.ui.main.utils;
 
 import java.util.HashMap;
 import java.util.Map;

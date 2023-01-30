@@ -5,9 +5,9 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.wakeup.ui.main.database.viewmodels.utils.LocalDateConverter;
-import com.example.wakeup.ui.main.database.viewmodels.utils.LocalTimeConverter;
-import com.example.wakeup.ui.main.database.viewmodels.utils.StateConverter;
+import com.example.wakeup.ui.main.utils.LocalDateConverter;
+import com.example.wakeup.ui.main.utils.LocalTimeConverter;
+import com.example.wakeup.ui.main.utils.StateConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

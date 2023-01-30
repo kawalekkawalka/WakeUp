@@ -1,4 +1,4 @@
-package com.example.wakeup.ui.main.database.viewmodels.utils.command;
+package com.example.wakeup.ui.main.utils.command;
 
 import java.util.Stack;
 
