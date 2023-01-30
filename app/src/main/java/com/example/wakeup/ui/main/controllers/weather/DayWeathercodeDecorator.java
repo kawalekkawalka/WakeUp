@@ -1,5 +1,10 @@
 package com.example.wakeup.ui.main.controllers.weather;
 
+import android.content.res.Resources;
+
+import com.example.wakeup.R;
+import com.example.wakeup.ui.main.utils.App;
+
 public class DayWeathercodeDecorator extends WeatherDecorator{
     private String weathercode;
 
@@ -12,94 +17,94 @@ public class DayWeathercodeDecorator extends WeatherDecorator{
         String weathercodeName;
         switch (weathercode) {
             case "0":
-                weathercodeName = "Czyste niebo";
+                weathercodeName = App.getRes().getString(R.string.clear_sky);
                 break;
             case "1":
-                weathercodeName = "Głównie czyste niebo";
+                weathercodeName = App.getRes().getString(R.string.mainly_clear_sky);
                 break;
             case "2":
-                weathercodeName = "Niebo częściami zachmurzone";
+                weathercodeName = App.getRes().getString(R.string.sky_partially_cloudy);
                 break;
             case "3":
-                weathercodeName = "Pochmurnie";
+                weathercodeName = App.getRes().getString(R.string.cloudy);
                 break;
             case "45":
-                weathercodeName = "Mgła";
+                weathercodeName = App.getRes().getString(R.string.fog);
                 break;
             case "48":
-                weathercodeName = "Mgła i szron";
+                weathercodeName = App.getRes().getString(R.string.freezing_fog);
                 break;
             case "51":
-                weathercodeName = "Lekka mżawka";
+                weathercodeName = App.getRes().getString(R.string.light_drizzle);
                 break;
             case "53":
-                weathercodeName = "Umiarkowana mżawka";
+                weathercodeName = App.getRes().getString(R.string.moderate_drizzle);
                 break;
             case "55":
-                weathercodeName = "Intensywna mżawka";
+                weathercodeName = App.getRes().getString(R.string.heavy_drizzle);
                 break;
             case "56":
-                weathercodeName = "Lekka marznąca mrzawka";
+                weathercodeName = App.getRes().getString(R.string.light_freezing_drizzle);
                 break;
             case "57":
-                weathercodeName = "Intensywna marznąca mżawka";
+                weathercodeName = App.getRes().getString(R.string.heavy_freezing_drizzle);
                 break;
             case "61":
-                weathercodeName = "Lekki deszcz";
+                weathercodeName = App.getRes().getString(R.string.slight_rain);
                 break;
             case "63":
-                weathercodeName = "Umiarkowany deszcz";
+                weathercodeName = App.getRes().getString(R.string.moderate_rain);
                 break;
             case "65":
-                weathercodeName = "Intensywny deszcz";
+                weathercodeName = App.getRes().getString(R.string.heavy_rain);
                 break;
             case "66":
-                weathercodeName = "Lekki marznący deszcz";
+                weathercodeName = App.getRes().getString(R.string.slight_freezing_rain);
                 break;
             case "67":
-                weathercodeName = "Intensywny marznący deszcz";
+                weathercodeName = App.getRes().getString(R.string.intense_freezing_rain);
                 break;
             case "71":
-                weathercodeName = "Lekkie opady śniegu";
+                weathercodeName = App.getRes().getString(R.string.slight_snow_fall);
                 break;
             case "73":
-                weathercodeName = "Umiarkowane opady śniegu";
+                weathercodeName = App.getRes().getString(R.string.moderate_snow_fall);
                 break;
             case "75":
-                weathercodeName = "Intensywne opady śniegu";
+                weathercodeName = App.getRes().getString(R.string.heavy_snow_fall);
                 break;
             case "77":
-                weathercodeName = "Śnieżyca";
+                weathercodeName = App.getRes().getString(R.string.blizzard);
                 break;
             case "80":
-                weathercodeName = "Przelotnie lekki deszcz";
+                weathercodeName = App.getRes().getString(R.string.slight_rain_shower);
                 break;
             case "81":
-                weathercodeName = "Przelotnie umiarkowany deszcz";
+                weathercodeName = App.getRes().getString(R.string.moderate_rain_shower);
                 break;
             case "82":
-                weathercodeName = "Przelotnie intensywny deszcz";
+                weathercodeName = App.getRes().getString(R.string.violent_rain_shower);
                 break;
             case "85":
-                weathercodeName = "Przelotnie niewielkie opady śniegu";
+                weathercodeName = App.getRes().getString(R.string.slight_snow_shower);
                 break;
             case "86":
-                weathercodeName = "Przelotnie silne opady śniegu";
+                weathercodeName = App.getRes().getString(R.string.heavy_snow_shower);
                 break;
             case "95":
-                weathercodeName = "Umiarkowana burza";
+                weathercodeName = App.getRes().getString(R.string.slight_thunderstorm);
                 break;
             case "96":
-                weathercodeName = "Burza z niewielkim gradem";
+                weathercodeName = App.getRes().getString(R.string.slight_thunderstorm_hail);
                 break;
             case "99":
-                weathercodeName = "Burza z silnym gradem";
+                weathercodeName = App.getRes().getString(R.string.heavy_thunderstorm_hail);
                 break;
             default:
-                weathercodeName = "Brak informacji o pogodzie";
+                weathercodeName = App.getRes().getString(R.string.missing_weather_information);
         }
 
 
-        return super.printWeather() + weathercodeName + "\n";
+        return super.printWeather() + weathercodeName + " " +App.getRes().getString(R.string.day_weathercode_decorator);
     }
 }
