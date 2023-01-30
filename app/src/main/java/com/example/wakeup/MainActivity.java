@@ -40,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        NotificationChannel channel = new NotificationChannel(getString(R.string.channelName), "TaskNotification", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
+
         replaceFragment(new NewsFragment());
 
         LocationRequest locationRequest = new LocationRequest();
@@ -60,13 +65,8 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         }
 
-        NotificationChannel channel = new NotificationChannel(getString(R.string.channelName), "TaskNotification", NotificationManager.IMPORTANCE_DEFAULT);
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.createNotificationChannel(channel);
-
         FusedLocationProviderClient fusedLocationClient = getFusedLocationProviderClient(this);
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
