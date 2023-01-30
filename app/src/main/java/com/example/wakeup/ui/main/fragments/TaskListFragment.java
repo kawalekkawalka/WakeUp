@@ -66,7 +66,6 @@ public class TaskListFragment extends Fragment {
     private final CommandHistory commandHistory = CommandHistory.getInstance();
     private Boolean newTaskAdded = false;
     private Boolean taskNeedsAlarm = false;
-    public static final String KEY_CURRENT_DATE = "currentDate";
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -266,7 +265,6 @@ public class TaskListFragment extends Fragment {
         private ImageView reminderIcon;
         private Task task;
         private FloatingActionButton fab;
-        private CardView cardView;
 
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));

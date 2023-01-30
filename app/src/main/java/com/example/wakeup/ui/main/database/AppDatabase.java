@@ -26,12 +26,13 @@ import com.example.wakeup.ui.main.models.TaskState;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Task.class, TaskState.class, TaskOpen.class, TaskInProgress.class, TaskFinished.class, UserLocation.class}, version = 5,autoMigrations = {@AutoMigration(from = 4, to = 5)} )
+@Database(entities = {Alarm.class, Task.class, TaskState.class, TaskOpen.class, TaskInProgress.class, TaskFinished.class, UserLocation.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase databaseInstance;
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
 
     public abstract TaskDao taskDao();
+
     public abstract AlarmDao alarmDao();
 
     public abstract LocationDao locationDao();
@@ -40,7 +41,8 @@ public abstract class AppDatabase extends RoomDatabase {
         if (databaseInstance == null) {
             databaseInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
-                            .build();
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return databaseInstance;
     }

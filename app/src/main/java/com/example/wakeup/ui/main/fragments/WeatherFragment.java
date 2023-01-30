@@ -1,5 +1,6 @@
 package com.example.wakeup.ui.main.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.wakeup.R;
+import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
 import com.example.wakeup.ui.main.utils.ApiProxy;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class WeatherFragment extends Fragment {
 
@@ -47,6 +51,11 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
         conditionsContainer = rootView.findViewById(R.id.conditions_container);
+        GifImageView gifImageView = rootView.findViewById(R.id.weather_gif);
+        gifImageView.setOnClickListener(view -> {
+            Intent switchActivityIntent = new Intent(getActivity(), ExtendedWeatherActivity.class);
+            startActivity(switchActivityIntent);
+        });
         ApiProxy proxy = new ApiProxy();
         proxy.getWeatherData(conditionsContainer, weatherType, latitude, longtitude);
         return rootView;

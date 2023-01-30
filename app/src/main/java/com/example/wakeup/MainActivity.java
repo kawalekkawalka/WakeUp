@@ -4,13 +4,13 @@ package com.example.wakeup;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -19,17 +19,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
-import com.example.wakeup.ui.main.fragments.TaskListFragment;
 import com.example.wakeup.databinding.ActivityMainBinding;
+import com.example.wakeup.ui.main.activities.ExtendedWeatherActivity;
+import com.example.wakeup.ui.main.fragments.AlarmFragment;
 import com.example.wakeup.ui.main.fragments.NewsFragment;
+import com.example.wakeup.ui.main.fragments.TaskListFragment;
 import com.example.wakeup.ui.main.fragments.WeatherFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_LOCATION_PERMISSION = 100;
@@ -41,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        replaceFragment(new NewsFragment());
 
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
@@ -60,33 +60,34 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         }
 
+        NotificationChannel channel = new NotificationChannel(getString(R.string.channelName), "TaskNotification", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
+
         FusedLocationProviderClient fusedLocationClient = getFusedLocationProviderClient(this);
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-            if (location != null) {
-                lastLocation = location;
-                WeatherFragment fragment = WeatherFragment.newInstance("normal", lastLocation.getLatitude(), lastLocation.getLongitude());
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.frame_layout, fragment);
-                fragmentTransaction.commit();
-            }
-        });
+
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
-
+                case R.id.weather:
+                    fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                        if (location != null) {
+                            lastLocation = location;
+                            WeatherFragment fragment = WeatherFragment.newInstance("normal", lastLocation.getLatitude(), lastLocation.getLongitude());
+                            replaceFragment(fragment);
+                        }
+                    });
+                    break;
                 case R.id.home:
-                    //replaceFragment(new NewsFragment());
-                    Intent switchActivityIntent = new Intent(this, ExtendedWeatherActivity.class);
-                    startActivity(switchActivityIntent);
+                    replaceFragment(new NewsFragment());
                     break;
                 case R.id.calendar:
-                    //replaceFragment(new CalendarFragment());
+                    replaceFragment(new TaskListFragment());
                     break;
                 case R.id.alarm:
-                    //replaceFragment(new AlarmFragment());
+                    replaceFragment(new AlarmFragment());
                     break;
             }
 

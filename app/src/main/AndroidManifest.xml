@@ -27,7 +27,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC4z4s3TfXYEhqulSDkNddZX7PORNaqt30"/>
-
         <activity
             android:name=".ui.main.activities.ExtendedWeatherActivity"
             android:exported="false">
