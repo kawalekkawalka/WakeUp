@@ -1,10 +1,13 @@
 package com.example.wakeup.ui.main.database.viewmodels;
 
 import android.app.Application;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.room.Insert;
 
 import com.example.wakeup.ui.main.database.repositories.TaskRepository;
 import com.example.wakeup.ui.main.models.Task;
@@ -30,6 +33,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public LiveData<List<Task>> getTaskForDate(LocalDate date) {
         return taskRepository.getTaskForDate(date);
+    }
+
+    public LiveData<Task> getTaskById(int taskId) {
+        return taskRepository.getTaskById(taskId);
     }
 
     public void insert(Task task) {

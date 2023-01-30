@@ -19,6 +19,7 @@ public class TaskRepository {
     private final LiveData<List<Task>> allTasks;
     private LiveData<List<Task>> tasksForDate;
 
+
     public TaskRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDao = db.taskDao();
@@ -39,6 +40,10 @@ public class TaskRepository {
 
     public void delete(Task task) {
         AppDatabase.databaseWriteExecutor.execute(() -> taskDao.delete(task));
+    }
+
+    public LiveData<Task> getTaskById(int taskId) {
+        return taskDao.getTaskById(taskId);
     }
 
     public LiveData<List<Task>> getTaskForDate(LocalDate date) {

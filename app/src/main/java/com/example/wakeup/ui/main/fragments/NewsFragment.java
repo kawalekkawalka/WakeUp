@@ -48,7 +48,7 @@ public class NewsFragment extends Fragment {
             public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     NewsApiResponse apiResponse = response.body();
-                    List<News> firstThreeArticles = apiResponse.getNews().subList(0,3);
+                    List<News> firstThreeArticles = apiResponse.getNews();
                     adapter.setData(firstThreeArticles);
                 }
             }

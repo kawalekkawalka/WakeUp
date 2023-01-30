@@ -26,9 +26,11 @@ public interface TaskDao {
     @Delete
     void delete(Task task);
 
-    @Query("SELECT * FROM task ORDER BY title")
+    @Query("SELECT * FROM task ORDER BY id")
     LiveData<List<Task>> getAll();
 
+    @Query("SELECT * FROM task WHERE id = :taskId")
+    LiveData<Task> getTaskById(int taskId);
 
     @TypeConverters(LocalDateConverter.class)
     @Query("SELECT * FROM task WHERE dueDate = :date")

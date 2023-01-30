@@ -28,7 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wakeup.R;
+import com.example.wakeup.ui.main.database.viewmodels.AlarmViewModel;
 import com.example.wakeup.ui.main.database.viewmodels.TaskViewModel;
+import com.example.wakeup.ui.main.models.Alarm;
 import com.example.wakeup.ui.main.models.Task;
 import com.example.wakeup.ui.main.models.TaskFinished;
 import com.example.wakeup.ui.main.models.TaskInProgress;
@@ -53,6 +55,7 @@ public class TaskListFragment extends Fragment {
     private ImageView nextDateArrow;
     private RecyclerView recyclerView;
     private TaskViewModel taskViewModel;
+    private AlarmViewModel alarmViewModel;
     private LocalDate currDate;
     private FloatingActionButton fabAdd;
     private FloatingActionButton fabUndo;
@@ -62,6 +65,8 @@ public class TaskListFragment extends Fragment {
     private static final String KEY_CURRENT_DATE = "currentDate";
     private final CommandHistory commandHistory = CommandHistory.getInstance();
     private Boolean newTaskAdded = false;
+    private Boolean taskNeedsAlarm = false;
+    public static final String KEY_CURRENT_DATE = "currentDate";
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -80,23 +85,23 @@ public class TaskListFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         updateList();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_CURRENT_DATE,currDate.toString());
+        outState.putString(KEY_CURRENT_DATE, currDate.toString());
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_task_list,container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         currDate = LocalDate.now();
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             currDate = LocalDate.parse(savedInstanceState.getString(KEY_CURRENT_DATE));
         }
         dateTextView = view.findViewById(R.id.date_text_view);
@@ -141,6 +146,7 @@ public class TaskListFragment extends Fragment {
                 newTask = new Task();
                 Dialog dialog = new Dialog(getActivity());
                 dialog.setContentView(R.layout.dialog_add_task);
+                final TextView txtDueDate = dialog.findViewById(R.id.due_date_text);
                 final EditText title = dialog.findViewById(R.id.new_task_title);
                 final EditText details = dialog.findViewById(R.id.new_task_details);
                 final TextView dueDateText = dialog.findViewById(R.id.due_date_text);
@@ -148,12 +154,12 @@ public class TaskListFragment extends Fragment {
                 final TextView dueHourText = dialog.findViewById(R.id.due_hour_text);
                 Button addTaskBtn = dialog.findViewById(R.id.btn_add_task);
 
-                DatePickerDialog.OnDateSetListener date = (view1,year, month, day) -> {
-                    calendar.set(Calendar.YEAR,year);
-                    calendar.set(Calendar.MONTH,month);
-                    calendar.set(Calendar.DAY_OF_MONTH,day);
-                    dueDateText.setText(LocalDate.of(year,month+1,day).toString());
-                    newTask.setDueDate(LocalDate.of(year,month+1,day));
+                DatePickerDialog.OnDateSetListener date = (view1, year, month, day) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+                    dueDateText.setText(LocalDate.of(year, month + 1, day).toString());
+                    newTask.setDueDate(LocalDate.of(year, month + 1, day));
                 };
 
                 dueHourText.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +194,7 @@ public class TaskListFragment extends Fragment {
                         newTask.setState(new TaskOpen(newTask));
                         newTaskAdded = true;
                         taskViewModel.insert(newTask);
+                        checkReminder(newTask);
                         dialog.dismiss();
                     }
                 });
@@ -220,6 +227,9 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onChanged(List<Task> tasks) {
                 adapter.setTasks(tasks);
+                if (taskNeedsAlarm) {
+                    createNewAlarm(adapter.getTasks().get(adapter.getItemCount()-1));
+                }
                 if(newTaskAdded){
                     newTaskAdded = false;
                     newTask.setId(tasks.get(adapter.getItemCount()-1).getId());
@@ -229,7 +239,25 @@ public class TaskListFragment extends Fragment {
         });
     }
 
-    private class TaskHolder extends RecyclerView.ViewHolder{
+    private void checkReminder(Task newTask) {
+        if (newTask.getHasReminder()) {
+            taskNeedsAlarm = true;
+        }
+    }
+
+    private void createNewAlarm(Task newTask) {
+        Alarm newAlarm = new Alarm();
+        newAlarm.setActive(false);
+        newAlarm.setDueDate(newTask.getDueDate());
+        newAlarm.setDueTime(newTask.getDueTime());
+        newAlarm.setTaskId(newTask.getId());
+
+        alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
+        alarmViewModel.insert(newAlarm);
+        taskNeedsAlarm = false;
+    }
+
+    private class TaskHolder extends RecyclerView.ViewHolder {
 
         private CardView cardView;
         private TextView titleTextView;
@@ -238,6 +266,7 @@ public class TaskListFragment extends Fragment {
         private ImageView reminderIcon;
         private Task task;
         private FloatingActionButton fab;
+        private CardView cardView;
 
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
@@ -253,39 +282,36 @@ public class TaskListFragment extends Fragment {
             titleTextView.setText(task.getTitle());
             detailsTextView.setText(task.getDetails());
             timeTextView.setText(task.getDueTime().toString());
-            if(task.getHasReminder()){
+            if (task.getHasReminder()) {
                 reminderIcon.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 reminderIcon.setVisibility(View.INVISIBLE);
             }
-            if(task.getState() instanceof TaskInProgress){
+            if (task.getState() instanceof TaskInProgress) {
                 cardView.setCardBackgroundColor(Color.parseColor("#F3F781"));
-            }else if(task.getState() instanceof  TaskFinished){
+            } else if (task.getState() instanceof TaskFinished) {
                 cardView.setCardBackgroundColor(Color.parseColor("#58FA82"));
             }
         }
-
-
     }
-
 
     private class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
         private List<Task> tasks = new ArrayList<>();
         private final CommandHistory commandHistory = CommandHistory.getInstance();
 
-        public TaskAdapter(){
+        public TaskAdapter() {
             this.tasks = new ArrayList<>();
         }
 
         @NonNull
         @Override
-        public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+        public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             return new TaskHolder(layoutInflater, parent);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull TaskHolder holder, int position){
+        public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
             Task task = tasks.get(position);
             holder.bind(task);
 
@@ -300,13 +326,12 @@ public class TaskListFragment extends Fragment {
                     MenuItem done = menu.findItem(2);
                     MenuItem delete = menu.findItem(3);
                     Intent intent = new Intent();
-                    intent.putExtra("taskId",position);
+                    intent.putExtra("taskId", position);
                     inProgress.setIntent(intent);
                     done.setIntent(intent);
                     delete.setIntent(intent);
                 }
             });
-
 
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -336,7 +361,7 @@ public class TaskListFragment extends Fragment {
         }
 
         @Override
-        public int getItemCount(){
+        public int getItemCount() {
             return tasks.size();
         }
 

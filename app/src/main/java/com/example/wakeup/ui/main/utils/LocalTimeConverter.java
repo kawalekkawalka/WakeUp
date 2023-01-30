@@ -8,7 +8,6 @@ import androidx.room.TypeConverter;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class LocalTimeConverter {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
