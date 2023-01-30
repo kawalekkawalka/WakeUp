@@ -9,6 +9,6 @@ public class NightTemperatureDecorator extends WeatherDecorator{
     }
 
     public String printWeather(){
-        return super.printWeather() + temperature + " stopni Celsjusza w nocy\n";
+        return super.printWeather() + temperature + "  °C during tha night\n";
     }
 }

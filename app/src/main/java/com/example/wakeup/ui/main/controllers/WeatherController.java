@@ -25,7 +25,7 @@ public class WeatherController {
     public String getExtendedWeather(HashMap<String, String> conditions){
         BasicWeather basicWeather = new BasicWeather();
         DayTemperatureDecorator dayTemperatureDecorator = new DayTemperatureDecorator(basicWeather, conditions.get("temperature_2m_day"));
-        NightTemperatureDecorator nightTemperatureDecorator = new NightTemperatureDecorator(dayTemperatureDecorator, conditions.get("temperature_2m_day"));
+        NightTemperatureDecorator nightTemperatureDecorator = new NightTemperatureDecorator(dayTemperatureDecorator, conditions.get("temperature_2m_night"));
         DayWeathercodeDecorator dayWeathercodeDecorator = new DayWeathercodeDecorator(nightTemperatureDecorator, conditions.get("weathercode_day"));
         NightWeathercodeDecorator nightWeathercodeDecorator = new NightWeathercodeDecorator(dayWeathercodeDecorator, conditions.get("weathercode_night"));
         PressureDecorator pressureDecorator = new PressureDecorator(nightWeathercodeDecorator, conditions.get("surface_pressure_day"), conditions.get("surface_pressure_night"));
