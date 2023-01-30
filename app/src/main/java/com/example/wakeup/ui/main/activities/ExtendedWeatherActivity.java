@@ -135,7 +135,7 @@ public class ExtendedWeatherActivity extends AppCompatActivity {
             if (location != null) {
                 lastLocation = location;
                 WeatherFragment fragment = WeatherFragment.newInstance("extended", lastLocation.getLatitude(), lastLocation.getLongitude());
-                locationTextView.setText("Your current location");
+                locationTextView.setText(getString(R.string.your_current_location));
                 replaceFragment(fragment);
             }
         });

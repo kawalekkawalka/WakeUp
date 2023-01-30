@@ -21,8 +21,6 @@ Gapp/src/main/java/com/example/wakeup/ui/main/database/dao/AlarmDao.java,8\3\83
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 n
 >app/src/main/java/com/example/wakeup/ui/main/models/Alarm.java,9\b\9bf7162232265f250673ac19a41f400d13e0163d
-„
-Tapp/src/main/java/com/example/wakeup/ui/main/activities/ExtendedWeatherActivity.java,9\b\9b955e267d6db2debe4db4754f10c4126dd7f236
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 r
@@ -31,8 +29,6 @@ v
 Fapp/src/main/java/com/example/wakeup/ui/main/database/AppDatabase.java,b\1\b1d577acd8c6cfcbb6e7d4665b9ab82b8443a015
 |
 Lapp/src/main/java/com/example/wakeup/ui/main/fragments/TaskListFragment.java,9\5\952e6cdee50a4c4a6e5774d65a5c4ec4c132d13e
-{
-Kapp/src/main/java/com/example/wakeup/ui/main/fragments/WeatherFragment.java,5\9\59a9c62a169d7ebec751a866358d0862f28da46d
 r
 Bapp/src/main/java/com/example/wakeup/ui/main/news/NewsAdapter.java,d\9\d9a06725c50bbf5d9b0876f81f5af6e2799e2899
 n
@@ -41,5 +37,3 @@ v
 Fapp/src/main/java/com/example/wakeup/ui/main/news/NewsApiResponse.java,8\0\809215a371a2868ff006ccf66cd96f7699c22489
 u
 Eapp/src/main/java/com/example/wakeup/ui/main/news/NewsViewHolder.java,1\b\1bde9acb0e0825ab02834c53620c1aa2346a9bfd
-x
-Happ/src/main/java/com/example/wakeup/ui/main/fragments/NewsFragment.java,7\f\7fb1fcb6e63e790ffe54d82a99a545a2edc8e5fc
